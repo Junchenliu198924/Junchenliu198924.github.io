@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      "用Jekyll来搭建个人博客以及所涉及的工具介绍"
-subtitle:   "搭建过程，已经实用工具汇总"
+subtitle:   "搭建过程、实用工具汇总"
 date:       2017-02-16
 author:     "Supremeliu"
 header-img: "img/ie_sifhay7o-john-cobb.jpg"
@@ -28,11 +28,11 @@ tags:
 
 ### 构建本机环境
 
-我本机环境是2014年 retina mac pro,更具官方网站的指引因为之前已经安装过了ruby的环境，是以前的安装的所以步骤这边就暂时省略，以后如果再安装再把具体的步骤上。
+我本机环境是2014年 retina mac pro,根据官方网站的指引因为之前已经安装过了ruby的环境，是以前的安装的所以步骤这边就暂时省略，以后如果再安装再把具体的步骤补上。
 
-[jekyll主页中文主页](http://jekyll.com.cn/)
+[jekyll中文主页](http://jekyll.com.cn/)
 
-* 进入“快速指南”按照步骤在本机的命令行下操作如下命令:
+* 进入“快速指南”按照步骤在本机的命令界面下操作如下命令:
 	
 		$gem install jekyll
 		$jekyll new myblog
@@ -47,7 +47,7 @@ tags:
 		$jekyll serve
 		=> 一个开发服务器将会运行在 http://localhost:4000/
 	
-* 因为官方文档的网页不够美观我也参考的对应几个jekyll网站最后决定fork[黄玄|项目jekyll](https://github.com/Huxpro) 的模板，通过git下载到本地。
+* 因为官方文档的网页不够美观我也参考的对应几个jekyll网站最后决定fork[黄玄项目jekyll](https://github.com/Huxpro) 的模板，通过git下载到本地。
 
 		--clone到本地文件夹
 		$git clone git@github.com:Huxpro/huxblog-boilerplate.git
@@ -75,7 +75,7 @@ tags:
 	
 	![](https://cl.ly/2K2f3M1V1c2l/Image%202017-02-17%20at%2000.11.17.png)	
 	
-* git clone 本项目的到本地，把刚才准备好的修改好的模本文件拷贝到github的主页工程中。
+* git clone 本项目的到本地，把刚才修改好的模板文件拷贝到github的主页工程中。
 
 		 git clone https://github.com/Junchenliu198924/Junchenliu198924.github.io.git
 		 cp -r *  ../../Junchenliu198924.github.io/
@@ -84,7 +84,7 @@ tags:
 		 --把本地代码提交到github
 		 git push origin master
 
-* 输入网址验证验证是否部署成功。
+* 输入网址验证是否部署成功。
 
 	![](https://cl.ly/2F2n351B3M2x/Image%202017-02-17%20at%2000.32.35.png)
 	
@@ -97,7 +97,7 @@ tags:
 
 ## 问题小结
 
-今天安装总体来说还是蛮顺利的，jekyll的文档中文支持也很好，基本按照操作文档执行就可以完成基础的安装任务，文档后续的更新我使用markdown 工具用的是一款叫做 [MacDown](http://macdown.uranusjr.com/)，因为markdown截图需要连接所以我选择了Cloudapp的这款工具，但是遇到截图比较大保存起来就会缓慢影响体验（微博的那个工具貌似用不了），如果你有什么好截图上传共享地址的软件可以再评论留言告知笔者，非常感谢！
+今天安装总体来说还是蛮顺利的，jekyll文档中文支持也很好，基本按照操作文档执行就可以完成基础安装任务，文档后续的更新我使用markdown 工具[MacDown的软件](http://macdown.uranusjr.com/)，因为markdown截图需要链接所以我选择了Cloudapp的这款工具，但是遇到截图比较大保存起来就会缓慢影响体验（微博的那个工具貌似用不了），如果你有什么好截图上传共享地址的软件可以在评论留言告知笔者，非常感谢！
 
 
 

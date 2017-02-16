@@ -3,164 +3,120 @@
   <channel>
     <title>Supremeliu Blog</title>
     <description>techbolg record mylife</description>
-    <link>http://localhost:4000/</link>
-    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 16 Feb 2017 22:16:28 +0800</pubDate>
-    <lastBuildDate>Thu, 16 Feb 2017 22:16:28 +0800</lastBuildDate>
+    <link>/</link>
+    <atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
+    <pubDate>Fri, 17 Feb 2017 01:25:11 +0800</pubDate>
+    <lastBuildDate>Fri, 17 Feb 2017 01:25:11 +0800</lastBuildDate>
     <generator>Jekyll v3.4.0</generator>
     
       <item>
         <title>用Jekyll来搭建个人博客以及所涉及的工具介绍</title>
-        <description>&lt;ul&gt;
-  &lt;li&gt;JavaScript 有着很奇怪的命名史。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;1995 年，它作为网景浏览器（Netscape Navigator）的一部分首次发布，网景给这个新语言命名为 LiveScript。一年后，为了搭上当时媒体热炒 Java 的顺风车，临时改名为了 JavaScript &lt;em&gt;（当然，Java 和 JavaScript 的关系，就和雷锋和雷锋塔一样 —— 并没有什么关系）&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://cl.ly/2M3o0b0K2I1z/Image%202017-02-16%20at%2013.20.15.png&quot; alt=&quot;java-javascript&quot; /&gt;
-&lt;small class=&quot;img-hint&quot;&gt;歪果仁的笑话怎么一点都不好笑&lt;/small&gt;&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;译者注：&lt;a href=&quot;https://en.wikipedia.org/wiki/JavaScript#History&quot;&gt;wikipedia 的 JavaScript 词条&lt;/a&gt; 更详细的叙述了这段历史&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;1996 年，网景将 JavaScript 提交给 &lt;a href=&quot;http://www.ecma-international.org/&quot;&gt;ECMA International（欧洲计算机制造商协会）&lt;/a&gt; 进行标准化，并最终确定出新的语言标准，它就是 ECMAScript。自此，ECMAScript 成为所有 JavaScript 实现的基础，不过，由于 JavaScript 名字的历史原因和市场原因（很显然 ECMAScript 这个名字并不令人喜欢……），现实中我们只用 ECMAScript 称呼标准，平时都还是使用 JavaScript 来称呼这个语言。&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;术语（译者注）：&lt;/p&gt;
-
+        <description>&lt;blockquote&gt;
   &lt;ul&gt;
-    &lt;li&gt;&lt;em&gt;标准（Standard）&lt;/em&gt;： 用于定义与其他事物区别的一套规则&lt;/li&gt;
-    &lt;li&gt;&lt;em&gt;实现（Implementation）&lt;/em&gt;： 某个标准的具体实施/真实实践&lt;/li&gt;
+    &lt;li&gt;&lt;em&gt;今天这是我2017年的第一篇技术博客，以后争取一天一更记录自己一天下来的收获或者分享一些自己有用的内容，今天借用了github和jekyll搭建了个人blog，我也是刚刚开始学习前端，接下来是我今天的分享&lt;/em&gt;&lt;/li&gt;
   &lt;/ul&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;不过，JavaScript 开发者们并不怎么在乎这些，因为在诞生之后的 15 年里，ECMAScript 并没有多少变化，而且现实中的很多实现都已经和标准大相径庭。其实在第一版的 ECMAScript 发布后，很快又跟进发布了两个版本，但是自从 1999 年 ECMAScript 3 发布后，十年内都没有任何改动被成功添加到官方规范里。取而代之的，是各大浏览器厂商们争先进行自己的语言拓展，web 开发者们别无选择只能去尝试并且支持这些 API。即使是在 2009 年 ECMAScript 5 发布之后，仍然用了数年这些新规范才得到了浏览器的广泛支持，可是大部分开发者还是写着 ECMAScript 3 风格的代码，并不觉得有必要去了解这些规范。&lt;/p&gt;
+&lt;h2 id=&quot;导航&quot;&gt;导航&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;#build1&quot;&gt;下载安装jekyll构建自己的demoblog&lt;/a&gt;&lt;/p&gt;
 
-&lt;blockquote&gt;
-  &lt;p&gt;译者注：&lt;a href=&quot;https://en.wikipedia.org/wiki/ECMAScript#4th_Edition_.28abandoned.29&quot;&gt;ECMAScript 第四版草案&lt;/a&gt;由于太过激进而被抛弃，Adobe 的 &lt;a href=&quot;https://en.wikipedia.org/wiki/ActionScript&quot;&gt;ActionScript 3.0&lt;/a&gt; 是 ECMAScript edition 4 的唯一实现（ Flash 差点就统一 Web 了）&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;&lt;a href=&quot;#build2&quot;&gt;问题小结&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;到了 2012 年，事情突然开始有了转变。大家开始推动停止对旧版本 IE 浏览器的支持，用 ECMAScript 5 (ES5) 风格来编写代码也变得更加可行。与此同时，一个新的 ECMAScript 规范也开始启动。到了这时，大家开始逐渐习惯以对 ECMAScript 规范的版本支持程度来形容各种 JavaScript 实现。在正式被指名为 ECMAScript 第 6 版 (ES6) 之前，这个新的标准原本被称为 ES.Harmony（和谐）。2015 年，负责制定 ECMAScript 规范草案的委员会 TC39 决定将定义新标准的制度改为一年一次，这意味着每个新特性一旦被批准就可以添加，而不像以往一样，规范只有在整个草案完成，所有特性都没问题后才能被定稿。因此，ECMAScript 第 6 版在六月份公布之前，又被重命名为了 ECMAScript 2015（ES2015）&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;下载安装jekyll构建自己的demoblog&quot;&gt;下载安装jekyll构建自己的demoblog&lt;/h2&gt;
 
-&lt;p&gt;目前，仍然有很多新的 JavaScript 特性或语法正在提议中，包括 &lt;a href=&quot;https://github.com/wycats/javascript-decorators&quot;&gt;decorators（装饰者）&lt;/a&gt;，&lt;a href=&quot;https://github.com/lukehoban/ecmascript-asyncawait&quot;&gt;async-await（async-await 异步编程模型）&lt;/a&gt; 和 &lt;a href=&quot;https://github.com/jeffmo/es-class-properties&quot;&gt;static class properties（静态类属性）&lt;/a&gt;。它们通常被称为 ES7，ES2016 或者 ES.Next 的特性，不过实际上它们只能被称作提案或者说可能性，毕竟 ES2016 的规范还没有完成，有可能全部都会引入，也有可能一个都没有。TC39 把一个提案分为 4 个阶段，你可以在 &lt;a href=&quot;https://babeljs.io/docs/usage/experimental/&quot;&gt;Babel 的官网&lt;/a&gt; 上查看各个提案目前都在哪个阶段了。&lt;/p&gt;
+&lt;h3 id=&quot;构建本机环境&quot;&gt;构建本机环境&lt;/h3&gt;
 
-&lt;p&gt;所以，我们该如何使用这一大堆术语呢？下面的列表或许能帮助到你：&lt;/p&gt;
+&lt;p&gt;我本机环境是2014年 retina mac pro,根据官方网站的指引因为之前已经安装过了ruby的环境，是以前的安装的所以步骤这边就暂时省略，以后如果再安装再把具体的步骤补上。&lt;/p&gt;
 
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;ECMAScript&lt;/strong&gt;：一个由 ECMA International 进行标准化，TC39 委员会进行监督的语言。通常用于指代标准本身。&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;JavaScript&lt;/strong&gt;：ECMAScript 标准的各种实现的最常用称呼。这个术语并不局限于某个特定版本的 ECMAScript 规范，并且可能被用于任何不同程度的任意版本的 ECMAScript 的实现。&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;ECMAScript 5 (ES5)&lt;/strong&gt;：ECMAScript 的第五版修订，于 2009 年完成标准化。这个规范在所有现代浏览器中都相当完全的实现了。&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;ECMAScript 6 (ES6) / ECMAScript 2015 (ES2015)&lt;/strong&gt;：ECMAScript 的第六版修订，于 2015 年完成标准化。这个标准被部分实现于大部分现代浏览器。可以查阅&lt;a href=&quot;http://kangax.github.io/compat-table/es6/&quot;&gt;这张兼容性表&lt;/a&gt;来查看不同浏览器和工具的实现情况。&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;ECMAScript 2016&lt;/strong&gt;：预计的第七版 ECMAScript 修订，计划于明年夏季发布。这份规范具体将包含哪些特性还没有最终确定&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;ECMAScript Proposals&lt;/strong&gt;：被考虑加入未来版本 ECMAScript 标准的特性与语法提案，他们需要经历五个阶段：Strawman（稻草人），Proposal（提议），Draft（草案），Candidate（候选）以及 Finished （完成）。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;在这整个 Blog 中，我将把目前的 ECMAScript 版本称作 ES6（因为这是大部分开发者最习以为常的），把明年的规范称作 ES2016（因为，与 ES6/ES2015 不同，这个名字将在整个标准化过程中沿用）并且将那些还没有成为 ECMAScript 定稿或草案的未来语言概念称为 ECMAScript 提案或者 JavaScript 提案。我将尽我所能在任何可能引起困惑的场合沿用这篇文章。&lt;/p&gt;
-
-&lt;h4 id=&quot;一些资源&quot;&gt;一些资源&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&quot;http://jekyll.com.cn/&quot;&gt;jekyll中文主页&lt;/a&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;TC39 的 &lt;a href=&quot;https://github.com/tc39/ecma262&quot;&gt;Github 仓库&lt;/a&gt;上可以看到所有目前公开的提案&lt;/li&gt;
-  &lt;li&gt;如果你还不熟悉 ES6，Babel 有一个&lt;a href=&quot;https://babeljs.io/docs/learn-es2015/&quot;&gt;很不错的特性概览&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;如果你希望深入 ES6，这里有两本很不错的书： Axel Rauschmayer 的 &lt;a href=&quot;http://exploringjs.com/&quot;&gt;Exploring ES6&lt;/a&gt;和 Nicholas Zakas 的 &lt;a href=&quot;https://leanpub.com/understandinges6&quot;&gt;Understanding ECMAScript 6&lt;/a&gt;。Axel 的博客 &lt;a href=&quot;http://www.2ality.com/&quot;&gt;2ality&lt;/a&gt; 也是很不错的 ES6 资源&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;进入“快速指南”按照步骤在本机的命令界面下操作如下命令:&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  $gem install jekyll
+  $jekyll new myblog
+  $cd myblog
+  ~/myblog $ jekyll serve
+  =&amp;gt; Now browse to http://localhost:4000
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;构建生产的模板网站主要用到以下两个命令（更多命令请查看官方文档）&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  $jekyll build
+  =&amp;gt; 当前文件夹中的内容将会生成到 ./site 文件夹中。
+  $jekyll serve
+  =&amp;gt; 一个开发服务器将会运行在 http://localhost:4000/
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;因为官方文档的网页不够美观我也参考的对应几个jekyll网站最后决定fork&lt;a href=&quot;https://github.com/Huxpro&quot;&gt;黄玄项目jekyll&lt;/a&gt; 的模板，通过git下载到本地。&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  --clone到本地文件夹
+  $git clone git@github.com:Huxpro/huxblog-boilerplate.git
+  --几个重要文件|文件夹说明
+  _site文件夹存放 jekyll build生成的静态源码文件
+  _post文件夹存放你的blog的内容（markdown）
+	
+  _config.xml文件用来配置个人信息参数
+  具体的配置信息我在这里不再赘述请查看模板项目说明即可
+	
+  *这边需要注意的是 
+  baseurl: &quot;/supremeliuBlog&quot;如果配置的话在本地运行的时候需要输入
+  jekyll serve --baseurl '' 
+  请确定在 --baseurl 的选项之后存在空串，这样的话你就可以在 localhost:4000 看到你
+  的站点（站点根地址不存在 /project-name）。
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;在&lt;a href=&quot;https://github.com/&quot;&gt;github&lt;/a&gt; 上新建个人主页的repository&lt;/p&gt;
+
+    &lt;p&gt;&lt;img src=&quot;https://cl.ly/200y0L1M2m2Z/[1b3064c16c95bec58954dab68391f609]_Image%25202017-02-17%2520at%252000.05.00.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+    &lt;p&gt;按照github 个人网站主要的按照规则命名  junchenliu198924.github.io&lt;/p&gt;
+
+    &lt;p&gt;&lt;img src=&quot;https://cl.ly/2K2f3M1V1c2l/Image%202017-02-17%20at%2000.11.17.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;git clone 本项目的到本地，把刚才修改好的模板文件拷贝到github的主页工程中。&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;   git clone https://github.com/Junchenliu198924/Junchenliu198924.github.io.git
+   cp -r *  ../../Junchenliu198924.github.io/
+   git add .
+   git commit &quot;2017-02-16&quot;
+   --把本地代码提交到github
+   git push origin master
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;输入网址验证是否部署成功。&lt;/p&gt;
+
+    &lt;p&gt;&lt;img src=&quot;https://cl.ly/2F2n351B3M2x/Image%202017-02-17%20at%2000.32.35.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+  &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img class=&quot;shadow&quot; width=&quot;320&quot; src=&quot;/img/in-post/post-js-version/keep-calm-and-learn-javascript.png&quot; /&gt;
-&lt;small class=&quot;img-hint&quot;&gt;来学 JavaScript 吧！&lt;/small&gt;&lt;/p&gt;
+&lt;p id=&quot;build2&quot;&gt;&lt;/p&gt;
 
-&lt;h4 id=&quot;著作权声明&quot;&gt;著作权声明&lt;/h4&gt;
+&lt;hr /&gt;
 
-&lt;p&gt;本文译自 &lt;a href=&quot;http://benmccormick.org/2015/09/14/es5-es6-es2016-es-next-whats-going-on-with-javascript-versioning/&quot;&gt;ES5, ES6, ES2016, ES.Next: What’s going on with JavaScript versioning?&lt;/a&gt; &lt;br /&gt;
-译者 &lt;a href=&quot;http://weibo.com/huxpro&quot;&gt;黄玄&lt;/a&gt;，首次发布于 &lt;a href=&quot;http://huangxuan.me&quot;&gt;Hux Blog&lt;/a&gt;，转载请保留以上链接&lt;/p&gt;
+&lt;h2 id=&quot;问题小结&quot;&gt;问题小结&lt;/h2&gt;
+
+&lt;p&gt;今天安装总体来说还是蛮顺利的，jekyll文档中文支持也很好，基本按照操作文档执行就可以完成基础安装任务，文档后续的更新我使用markdown 工具&lt;a href=&quot;http://macdown.uranusjr.com/&quot;&gt;MacDown的软件&lt;/a&gt;，因为markdown截图需要链接所以我选择了Cloudapp的这款工具，但是遇到截图比较大保存起来就会缓慢影响体验（微博的那个工具貌似用不了），如果你有什么好截图上传共享地址的软件可以在评论留言告知笔者，非常感谢！&lt;/p&gt;
+
 </description>
         <pubDate>Thu, 16 Feb 2017 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2017/02/16/js-version-copy/</link>
-        <guid isPermaLink="true">http://localhost:4000/2017/02/16/js-version-copy/</guid>
-        
-        <category>前端开发</category>
+        <link>/2017/02/16/jekyll-install/</link>
+        <guid isPermaLink="true">/2017/02/16/jekyll-install/</guid>
         
         <category>实用教程</category>
         
-        <category>翻译</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Welcome to Hux Blog</title>
-        <description>&lt;blockquote&gt;
-  &lt;p&gt;“Yeah It’s on. ”&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
-
-&lt;p&gt;Hux 的 Blog 就这么开通了。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;#build&quot;&gt;跳过废话，直接看技术实现 &lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;2015 年，Hux 总算有个地方可以好好写点东西了。&lt;/p&gt;
-
-&lt;p&gt;作为一个程序员， Blog 这种轮子要是挂在大众博客程序上就太没意思了。一是觉得大部分 Blog 服务都太丑，二是觉得不能随便定制不好玩。之前因为太懒没有折腾，结果就一直连个写 Blog 的地儿都没有。&lt;/p&gt;
-
-&lt;p&gt;在玩了一段时间知乎之后，答题的快感又激起了我开博客的冲动。之前的&lt;a href=&quot;http://huangxuan.me/portfolio&quot;&gt;个人网站&lt;/a&gt;是作品集形式的（现在集成进来了），并不适合用来写博文，一不做二不休，花一天搞一个吧！&lt;/p&gt;
-
-&lt;p id=&quot;build&quot;&gt;&lt;/p&gt;
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;正文&quot;&gt;正文&lt;/h2&gt;
-
-&lt;p&gt;接下来说说搭建这个博客的技术细节。&lt;/p&gt;
-
-&lt;p&gt;正好之前就有关注过 &lt;a href=&quot;https://pages.github.com/&quot;&gt;GitHub Pages&lt;/a&gt; + &lt;a href=&quot;http://jekyllrb.com/&quot;&gt;Jekyll&lt;/a&gt; 快速 Building Blog 的技术方案，非常轻松时尚。&lt;/p&gt;
-
-&lt;p&gt;其优点非常明显：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;Markdown&lt;/strong&gt; 带来的优雅写作体验&lt;/li&gt;
-  &lt;li&gt;非常熟悉的 Git workflow ，&lt;strong&gt;Git Commit 即 Blog Post&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;利用 GitHub Pages 的域名和免费无限空间，不用自己折腾主机
-    &lt;ul&gt;
-      &lt;li&gt;如果需要自定义域名，也只需要简单改改 DNS 加个 CNAME 就好了&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Jekyll 的自定制非常容易，基本就是个模版引擎&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;本来觉得最大的缺点可能是 GitHub 在国内访问起来太慢，所以第二天一起床就到 GitCafe(Chinese GitHub Copy) 迁移了一个&lt;a href=&quot;http://huxpro.gitcafe.io&quot;&gt;镜像&lt;/a&gt;出来，结果还是巨慢。&lt;/p&gt;
-
-&lt;p&gt;哥哥可是个前端好嘛！ 果断开 Chrome DevTool 查了下网络请求，原来是 &lt;strong&gt;pending 在了 Google Fonts&lt;/strong&gt; 上，页面渲染一直被阻塞到请求超时为止，难怪这么慢。&lt;br /&gt;
-忍痛割爱，只好把 Web Fonts 去了（反正超时看到的也只能是 fallback ），果然一下就正常了，而且 GitHub 和 GitCafe 对比并没有感受到明显的速度差异，虽然 github 的 ping 值明显要高一些，达到了 300ms，于是用 DNSPOD 优化了一下速度。&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;配置的过程中也没遇到什么坑，基本就是 Git 的流程，相当顺手&lt;/p&gt;
-
-&lt;p&gt;大的 Jekyll 主题上直接 fork 了 Clean Blog（这个主题也相当有名，就不多赘述了。唯一的缺点大概就是没有标签支持，于是我给它补上了。）&lt;/p&gt;
-
-&lt;p&gt;本地调试环境需要 &lt;code class=&quot;highlighter-rouge&quot;&gt;gem install jekyll&lt;/code&gt;，结果 rubygem 的源居然被墙了……后来手动改成了我大淘宝的镜像源才成功&lt;/p&gt;
-
-&lt;p&gt;Theme 的 CSS 是基于 Bootstrap 定制的，看得不爽的地方直接在 Less 里改就好了（平时更习惯 SCSS 些），&lt;strong&gt;不过其实我一直觉得 Bootstrap 在移动端的体验做得相当一般，比我在淘宝参与的团队 CSS 框架差多了……&lt;/strong&gt;所以为了体验，也补了不少 CSS 进去&lt;/p&gt;
-
-&lt;p&gt;最后就进入了耗时反而最长的&lt;strong&gt;做图、写字&lt;/strong&gt;阶段，也算是进入了&lt;strong&gt;写博客&lt;/strong&gt;的正轨，因为是类似 Hack Day 的方式去搭这个站的，所以折腾折腾着大半夜就过去了。&lt;/p&gt;
-
-&lt;p&gt;第二天考虑中文字体的渲染，fork 了 &lt;a href=&quot;http://www.typeisbeautiful.com/&quot;&gt;Type is Beautiful&lt;/a&gt; 的 &lt;code class=&quot;highlighter-rouge&quot;&gt;font&lt;/code&gt; CSS，调整了字号，适配了 Win 的渣渲染，中英文混排效果好多了。&lt;/p&gt;
-
-&lt;h2 id=&quot;后记&quot;&gt;后记&lt;/h2&gt;
-
-&lt;p&gt;回顾这个博客的诞生，纯粹是出于个人兴趣。在知乎相关问题上回答并获得一定的 star 后，我决定把这个博客主题当作一个小小的开源项目来维护。&lt;/p&gt;
-
-&lt;p&gt;在经历 v1.0 - v1.5 的蜕变后，这个博客主题愈发完整，不但增加了诸多 UI 层的优化（opinionated）；在代码层面，更加丰富的配置项也使得这个主题拥有了更好的灵活性与可拓展性。而作为一个开源项目，我也积极的为其完善文档与解决 issue。&lt;/p&gt;
-
-&lt;p&gt;如果你恰好逛到了这里，希望你也能喜欢这个博客主题。&lt;/p&gt;
-
-&lt;p&gt;—— Hux 后记于 2015.10&lt;/p&gt;
-</description>
-        <pubDate>Thu, 29 Jan 2015 20:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2015/01/29/hello-2015/</link>
-        <guid isPermaLink="true">http://localhost:4000/2015/01/29/hello-2015/</guid>
-        
-        <category>生活</category>
+        <category>Jekyll</category>
         
         
       </item>
