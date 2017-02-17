@@ -10,9 +10,9 @@
     <meta name="keyword"  content="">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>About - Supremeliu Blog</title>
+    <title>用Jekyll在博客页面中添加网易云音乐播放 - Supremeliu Blog</title>
 
-    <link rel="canonical" href="http://localhost:4000/about/">
+    <link rel="canonical" href="http://localhost:4000/2017/02/17/jekyll-addMusic/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -123,223 +123,227 @@
 </script>
 
 
-    <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/img/379H.jpg')">
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/2017-02-17-Iverson.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/2017-02-17-Iverson.jpg')
+    }
+</style>
+<header class="intro-header" >
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
-                <div class="site-heading">
-                    <h1>About</h1>
-                    <!--<hr class="small">-->
-                    <span class="subheading">Hey, this is Supremeliu.</span>
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#实用教程" title="实用教程">实用教程</a>
+                        
+                        <a class="tag" href="/tags/#Jekyll" title="Jekyll">Jekyll</a>
+                        
+                    </div>
+                    <h1>用Jekyll在博客页面中添加网易云音乐播放</h1>
+                    
+                    
+                    <h2 class="subheading">在博客中添加音乐播放和今天才到的一些前段的坑~</h2>
+                    
+                    <span class="meta">Posted by Supremeliu on February 17, 2017</span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Main Content -->
-<div class="container">
-	<div class="row">
-        
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
 
-<!-- USE SIDEBAR -->
     <!-- Post Container -->
-    		<div class="
-                col-lg-8 col-lg-offset-1
-                col-md-8 col-md-offset-1
-                col-sm-12
-                col-xs-12
-                post-container
-            ">
-    			<!-- Language Selector -->
-<select onchange= "onLanChange(this.options[this.options.selectedIndex].value)">
-    <option value="0" selected> 中文 Chinese </option>
-    <option value="1"> 英语 English </option>
-</select>
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
 
-<!-- Chinese Version -->
-<div class="zh post-container">
-    <blockquote>
-        世界那么大，多玩玩看看。
-    </blockquote>
-        科技让生化更加纯粹美好， 我的愿望世界和平~
+				<blockquote>
+  <ul>
+    <li><em>正好这几天公司上午没有什么事情，完善一下自己刚刚发布的blog，以后自己还会持续对我的网站进行改动。</em></li>
+  </ul>
+</blockquote>
 
+<h2 id="导航">导航</h2>
+<p><a href="#build1">在博客页面中添加网易云音乐播放</a></p>
+
+<p><a href="#build2">今日问题小结</a></p>
+
+<hr />
+<h2 id="在博客页面中添加网易云音乐播放">在博客页面中添加网易云音乐播放</h2>
+
+<p>网易云音乐是是我自己的平时听歌用你的软件，无论是移动端还是网页端，界面设计感我觉得是比较不错的今天偶然发现了一个生成外部链接的地方，</p>
+
+<p><img src="https://cl.ly/1d320F2J0Z1X/Image%202017-02-18%20at%2001.57.50.png" alt="" /></p>
+
+<p>想着以后回看的时候还能听听当时听的歌儿，感觉应该会不错吧应该。添加配置很简单具体如下：</p>
+
+<ul>
+  <li>
+    <p>复制要在blog上面播放的曲目 iframe地址比如：
+<code class="highlighter-rouge">&lt;iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=450 src="//music.163.com/outchain/player?type=1&amp;id=34930257&amp;auto=1&amp;height=430"&gt;&lt;/iframe&gt;</code></p>
+  </li>
+  <li>
+    <p>把这段代码加入到对应的{项目文件夹}/_layout/page.html模板文件，添加的代码如下：</p>
+  </li>
+</ul>
+
+<!--网易云音乐变量为page.music-id  变量为播放歌曲的序列号-->
+
+<div class="highlighter-rouge"><pre class="highlight"><code>           &lt;iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=1&amp;id=34930257&amp;auto=1&amp;height=32"&gt;&lt;/iframe&gt;
+</code></pre>
 </div>
 
-<!-- English Version -->
-<div class="en post-container">
-    <blockquote>
-        Designer or Engineer, things in between.
-    </blockquote>
+<ul>
+  <li>
+    <p>在对应的更新上面配置网易music ID就行，这篇blog的歌曲是冰冰推荐的《成都》，现在貌似很火，也是蛮好听的。</p>
 
-    <p>
-        Your work is going to fill a large part of your life, and the only way to be truly satisfied is to do what you believe is great work. And the only way to do great work is to love what you do. If you haven’t found it yet, keep looking. Don’t settle. As with all matters of the heart, you’ll know when you find it.
-    </p>
+    <div class="highlighter-rouge"><pre class="highlight"><code>          ---
+          layout:     post
+          title:      "用Jekyll在博客页面中添加网易云音乐播放"
+          subtitle:   "在博客中添加音乐播放和今天才到的一些前段的坑~"
+          date:       2017-02-17
+          author:     "Supremeliu"
+          header-img: "img/ie_sifhay7o-john-cobb.jpg"
+          music-id: 34930257
+          tags:
+              - 实用教程
+              - Jekyll
+          ---
+</code></pre>
+    </div>
+  </li>
+  <li>
+    <p>调整好以后就可以重新运行jekyll build   和 jekyll serve,测试好完成上传github，具体步骤可以参考 2017-02-16 的jekyll 部署。</p>
+  </li>
+</ul>
 
-    <p>
-    If you want to live your life in a creative way, as an artist, you have to not look back too much. You have to be willing to take whatever you’ve done and whoever you were and throw them away.
-    </p>
+<p id="build2"></p>
 
-    <p style="text-align:right;">
-    -- Steve Jobs
-    </p>
+<hr />
 
-</div>
+<h2 id="问题小结">问题小结</h2>
 
-<!-- Handle Language Change -->
-<script type="text/javascript">
-    var $zh = document.querySelector(".zh");
-    var $en = document.querySelector(".en");
-    function onLanChange(index){
-        if(index == 0){
-            $zh.style.display = "block";
-            $en.style.display = "none";
-        }else{
-            $en.style.display = "block";
-            $zh.style.display = "none";
-        }
-    }
-    onLanChange(0);
-</script>
+<p>今天工作比较空闲，我上午添加了my blog对于流媒体的布局，下午在开发一个老项目，碰到不少坑啊，我也刚刚学习前端，所以碰到很多问题都是很奇怪。</p>
 
+<ul>
+  <li>下午的时候想给老的页面加一个运用bootstrap的弹出框，但是试了半天都是javascript报错，自己查了好久，最后看了下jquery，问题是因为老的页面jquery的软件1.2.*版本不支持应用对应函数 。</li>
+</ul>
 
-
-
-<!-- 多说评论框 start -->
-<div class="comment">
-    <div class="ds-thread"
-    
-        data-thread-key="Supremeliu/about"
-    
-
-    data-title="About"
-    data-url="http://localhost:4000/about/"></div>
-</div>
-<!-- 多说评论框 end -->
-
-<!-- Duoshuo hacking -->
-<input id="dsUser" type="hidden" value="Supremeliu"  />
-
-<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-<script type="text/javascript">
-    // dynamic User hacking by Hux
-    var _user = document.getElementById('dsUser').value;
-    // duoshuo comment query.
-    var duoshuoQuery = {short_name: _user };
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0]
-         || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-</script>
-<!-- 多说公共JS代码 end -->
+<blockquote>
+  <p><em>—–周末愉快！</em></p>
+</blockquote>
 
 
 
+                <hr>
+
+                
+                <!-- 多说 Share start -->
+                </style>
+                <div class="ds-share"
+                    style="text-align: right"
+                    data-thread-key="/2017/02/17/jekyll-addMusic"
+                    data-title="用Jekyll在博客页面中添加网易云音乐播放"
+                    data-url="http://localhost:4000/2017/02/17/jekyll-addMusic/"
+                    data-images="http://localhost:4000/img/2017-02-17-Iverson.jpg"
+                    data-content="
+  
+    正好这几天公司上午没有什么事情，完善一下自己刚刚发布的blog，以后自己还会持续对我的网站进行改动。
+  
 
 
-    		</div>
+导航
+在博客页面中添加网易... | Supremeliu Blog " >
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- 多说 Share end-->
+                
+
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/02/16/jekyll-install/" data-toggle="tooltip" data-placement="top" title="用Jekyll来搭建个人博客以及所涉及的工具介绍">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                </ul>
+
+
+                
+
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                        data-thread-key="/2017/02/17/jekyll-addMusic"
+                        data-title="用Jekyll在博客页面中添加网易云音乐播放"
+                        data-url="http://localhost:4000/2017/02/17/jekyll-addMusic/" >
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
+
+                
+
+            </div>
+
     <!-- Sidebar Container -->
             <div class="
-                col-lg-3 col-lg-offset-0
-                col-md-3 col-md-offset-0
-                col-sm-12
-                col-xs-12
-                sidebar-container
-            ">
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+
+                <!--网易云音乐变量为page.music-id  变量为播放歌曲的序列号-->
+
+                
+               <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=1&id=34930257&auto=1&height=32"></iframe>
+                
                 <!-- Featured Tags -->
                 
                 <section>
                     <hr class="hidden-sm hidden-xs">
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
-                        
+        				
                             
-                                <a href="/tags/#实用教程" title="实用教程" rel="2">
+                				<a href="/tags/#实用教程" title="实用教程" rel="2">
                                     实用教程
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#Jekyll" title="Jekyll" rel="2">
+                				<a href="/tags/#Jekyll" title="Jekyll" rel="2">
                                     Jekyll
                                 </a>
                             
-                        
-                    </div>
+        				
+        			</div>
                 </section>
                 
 
-                <!-- Short About -->
-                <section class="visible-md visible-lg">
-                    <hr><h5><a href="/about/">ABOUT ME</a></h5>
-                    <div class="short-about">
-                        
-                            <img src="/img/avatar-supremeliu.jpg" />
-                        
-                        
-                            <p>让科技是自己的生活变得更加简单和幸福</p>
-                        
-                        <!-- SNS Link -->
-                        <ul class="list-inline">
-                            
-                            
-                            <li>
-                                <a href="https://twitter.com/supremeliu">
-                                    <span class="fa-stack fa-lg">
-                                        <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
-                                    </span>
-                                </a>
-                            </li>
-                            
-                            
-                            <li>
-                                <a target="_blank" href="https://www.zhihu.com/people/supremeliu">
-                                    <span class="fa-stack fa-lg">
-                                        <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa  fa-stack-1x fa-inverse">知</i>
-                                    </span>
-                                </a>
-                            </li>
-                            
-                            
-                            <li>
-                                <a target="_blank" href="http://weibo.com/supremeliu">
-                                    <span class="fa-stack fa-lg">
-                                        <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
-                                    </span>
-                                </a>
-                            </li>
-                            
-                            
-                            <li>
-                                <a target="_blank" href="https://www.facebook.com/supremeliu">
-                                    <span class="fa-stack fa-lg">
-                                        <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
-                                    </span>
-                                </a>
-                            </li>
-                            
-                            
-                            <li>
-                                <a target="_blank" href="https://github.com/Junchenliu198924">
-                                    <span class="fa-stack fa-lg">
-                                        <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                    </span>
-                                </a>
-                            </li>
-                            
-                        </ul>
-                    </div>
-                </section>
                 <!-- Friends Blog -->
                 
                 <hr>
@@ -358,10 +362,70 @@
                     
                 </ul>
                 
-    		</div>
-        
-	</div>
-</div>
+            </div>
+        </div>
+    </div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'Supremeliu';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user };
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
 
 
     <!-- Footer -->

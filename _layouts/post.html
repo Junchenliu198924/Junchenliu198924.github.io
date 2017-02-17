@@ -91,6 +91,8 @@ layout: default
                 </ul>
 
 
+                
+
                 {% if site.duoshuo_username %}
                 <!-- 多说评论框 start -->
                 <div class="comment">
@@ -119,6 +121,12 @@ layout: default
                 col-md-10 col-md-offset-1
                 sidebar-container">
 
+
+                <!--网易云音乐变量为page.music-id  变量为播放歌曲的序列号-->
+
+                {% if page.music-id %}
+               <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=1&id={{page.music-id}}&auto=1&height=32"></iframe>
+                {% endif %}
                 <!-- Featured Tags -->
                 {% if site.featured-tags %}
                 <section>
