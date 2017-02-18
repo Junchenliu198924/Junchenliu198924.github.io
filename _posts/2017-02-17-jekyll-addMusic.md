@@ -4,7 +4,7 @@ title:      "Jekyll在博客页面中添加网易云音乐播放"
 subtitle:   "在博客中添加音乐播放以及今天踩到的一些前端的坑~"
 date:       2017-02-17
 author:     "Supremeliu"
-header-img: "img/2017-02-17-Iverson.jpg"
+header-img: "img/2017-02-17-tech.jpg"
 music-id: 34930257
 tags:
     - 实用教程
@@ -85,7 +85,7 @@ tags:
 今天工作比较空闲，我上午添加了my blog对于流媒体的布局，下午在开发一个老项目，碰到不少坑啊，我也刚刚学习前端，所以碰到很多问题都是很奇怪。
 
 
-* 下午的时候想给老的页面加一个运用bootstrap的弹出框，但是试了半天都是javascript报错，自己查了好久，最后看了下jquery，问题是因为老的页面jquery的1.2.*版本不支持应用对应函数 ，最后换成传统的事件函数写法即可，浪费了我不少时间。
+* 下午的时候想给老的页面加一个运用bootstrap的弹出框，但是试了半天都是javascript报错，自己查了好久，最后看了下jquery，问题是因为老的页面jquery的软件1.2.*版本不支持应用对应函数 。
 
 
 
