@@ -5,12 +5,12 @@
     <description>techbolg record mylife</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 18 Feb 2017 02:54:37 +0800</pubDate>
-    <lastBuildDate>Sat, 18 Feb 2017 02:54:37 +0800</lastBuildDate>
+    <pubDate>Sat, 18 Feb 2017 08:51:22 +0800</pubDate>
+    <lastBuildDate>Sat, 18 Feb 2017 08:51:22 +0800</lastBuildDate>
     <generator>Jekyll v3.4.0</generator>
     
       <item>
-        <title>用Jekyll在博客页面中添加网易云音乐播放</title>
+        <title>Jekyll在博客页面中添加网易云音乐播放</title>
         <description>&lt;blockquote&gt;
   &lt;ul&gt;
     &lt;li&gt;&lt;em&gt;正好这几天公司上午没有什么事情，完善一下自己刚刚发布的blog，以后自己还会持续对我的网站进行改动。&lt;/em&gt;&lt;/li&gt;
@@ -80,7 +80,7 @@
 &lt;p&gt;今天工作比较空闲，我上午添加了my blog对于流媒体的布局，下午在开发一个老项目，碰到不少坑啊，我也刚刚学习前端，所以碰到很多问题都是很奇怪。&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;下午的时候想给老的页面加一个运用bootstrap的弹出框，但是试了半天都是javascript报错，自己查了好久，最后看了下jquery，问题是因为老的页面jquery的软件1.2.*版本不支持应用对应函数 。&lt;/li&gt;
+  &lt;li&gt;下午的时候想给老的页面加一个运用bootstrap的弹出框，但是试了半天都是javascript报错，自己查了好久，最后看了下jquery，问题是因为老的页面jquery的1.2.*版本不支持应用对应函数 ，最后换成传统的事件函数写法即可，浪费了我不少时间。&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;blockquote&gt;
