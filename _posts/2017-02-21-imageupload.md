@@ -262,7 +262,55 @@ tags:
    
    
    
-* ### 前端进行展示效果（未完待补）
+* ### 在页面导入css以及kindedit工具js
+
+		<%--上传组件--%>
+		<link rel="stylesheet" href="/js/kindeditor-4.1.7/themes/default/default.css" />
+		<script src="/js/kindeditor-4.1.7/kindeditor-min.js"></script>
+	
+
+* ### 在页面中添加js代码（自己也是刚刚接触前段简要的注释下调用的js过程）
+
+
+		<script>
+		       $(function() {
+		        var uploadbutton = KindEditor.uploadbutton({
+		            button : $('#uploadButton')[0],//上传button按钮
+		            fieldName : 'uploadFile',//类型为uploadFile这个是富文本插件参数
+		            url : '/service/pic/upload?dir=image',//送请求响应地址
+		                    afterUpload : function(data) {
+		                        if (data.error === 0) {
+		                            var url = KindEditor.formatUrl(data.url, 'absolute');
+		                            var tagurl= "<img id='bigImage' name='bigImage' alt=''  width='150' height='150' src='"+url+"'>";
+		                            var   img2url   = "<img id='midImage' width='100' height='100' name='midImage' src='"+ url   + "'>"
+		                            var   img3url   = "<img id='smaImage' width='50' height='50' name='smaImage' src='"+ url   + "'>"
+		                            $('#url').val(url);
+		                            //在网页中添加更新上传头像
+		                            $(".img-b").html(tagurl)  ;
+		                            $(".img-s").eq(0).html(img2url)  ;
+		                            $(".img-s").eq(1).html(img3url)  ;
+		                        } else {
+		                            alert(data.message);
+		                }
+		            },
+		            afterError : function(str) {
+		                alert('自定义错误信息: ' + str);
+		            }
+		        });
+		        uploadbutton.fileBox.change(function(e) {
+		            uploadbutton.submit();
+		        });
+		    });
+		</script>
+
+
+
+* ### js成功调用截图
+
+![](https://cl.ly/0o0U1A073S2I/Image%202017-02-23%20at%2010.19.41.png)
+
+
+
 
 
 
