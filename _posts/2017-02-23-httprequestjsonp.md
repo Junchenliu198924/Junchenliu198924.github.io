@@ -1,19 +1,19 @@
 ---
 layout:     post
-title:      "http请求跨域请求资源-JSONP原理解析"
+title:      "java-web跨域请求解决方案-jsonp"
 subtitle:   "java web功能实现笔记"
 date:       2017-02-23
 author:     "Supremeliu"
 header-img: "img/ie_sifhay7o-john-cobb.jpg"
 tags:
-	 - 原理解析
+    - 实用教程
     - java
     - web
 ---
 
 
 
->* *最近一直在学习前段的一些基本变成技巧，对于http请求资源的解决方法比较普遍的两种一种就是今天分享的JSONP，还有另外一种就是通过服务器端httpclient工具包进行请求获取资源（明天的内容有了~）*
+>* *最近一直在学习前段的一些基本变成技巧，对于http请求资源的解决方法比较普遍的两种，一种就是今天分享的JSONP，还有另外一种就是通过服务器端httpclient工具包进行请求获取资源（明天的内容有了~）*
 
 
 ---

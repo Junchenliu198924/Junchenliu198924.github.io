@@ -5,9 +5,686 @@
     <description>techbolg record mylife</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sun, 19 Feb 2017 23:47:20 +0800</pubDate>
-    <lastBuildDate>Sun, 19 Feb 2017 23:47:20 +0800</lastBuildDate>
+    <pubDate>Fri, 24 Feb 2017 12:14:00 +0800</pubDate>
+    <lastBuildDate>Fri, 24 Feb 2017 12:14:00 +0800</lastBuildDate>
     <generator>Jekyll v3.4.0</generator>
+    
+      <item>
+        <title>java-web跨域请求解决方案-jsonp</title>
+        <description>&lt;blockquote&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;em&gt;最近一直在学习前段的一些基本变成技巧，对于http请求资源的解决方法比较普遍的两种，一种就是今天分享的JSONP，还有另外一种就是通过服务器端httpclient工具包进行请求获取资源（明天的内容有了~）&lt;/em&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;1用js加载的方式来解决不能跨域请求资源&quot;&gt;1、用js加载的方式来解决不能跨域请求资源&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;准备一个简单的jsp文件：&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &amp;lt;%@page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+           pageEncoding=&quot;UTF-8&quot;%&amp;gt;
+	
+ &amp;lt;%
+     out.print(&quot;{\&quot;abc\&quot;:123}&quot;);
+ %&amp;gt;  返回为json字符串：
+
+ {
+     &quot;abc&quot;: 123
+ }
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;新建一个html文件：&lt;/p&gt;
+
+    &lt;p&gt;testforjsonp.htm:&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &lt;span class=&quot;cp&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;&lt;/span&gt;
+ &lt;span class=&quot;nt&quot;&gt;&amp;lt;html&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;lang=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;en&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+ &lt;span class=&quot;nt&quot;&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
+     &lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;charset=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;UTF-8&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+     &lt;span class=&quot;nt&quot;&gt;&amp;lt;title&amp;gt;&lt;/span&gt;test&lt;span class=&quot;nt&quot;&gt;&amp;lt;/title&amp;gt;&lt;/span&gt;
+     &lt;span class=&quot;nt&quot;&gt;&amp;lt;script &lt;/span&gt;&lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text/javascript&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/js/jquery-easyui-1.4.1/jquery.min.js&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+ &lt;span class=&quot;nt&quot;&gt;&amp;lt;/head&amp;gt;&lt;/span&gt;
+	
+	
+ &lt;span class=&quot;nt&quot;&gt;&amp;lt;body&amp;gt;&lt;/span&gt;
+ &lt;span class=&quot;nt&quot;&gt;&amp;lt;script&amp;gt;&lt;/span&gt;
+     &lt;span class=&quot;nx&quot;&gt;alert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+     &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ajax&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
+         &lt;span class=&quot;na&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;POST&quot;&lt;/span&gt;  &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+         &lt;span class=&quot;na&quot;&gt;dataType&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;  &lt;span class=&quot;s2&quot;&gt;&quot;json&quot;&lt;/span&gt;   &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+         &lt;span class=&quot;na&quot;&gt;url&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;http://localhost:8081/json.jsp&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+         &lt;span class=&quot;na&quot;&gt;success&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;  &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+             &lt;span class=&quot;nx&quot;&gt;alert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;abc&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;//能够正常返回json字符串&lt;/span&gt;
+         &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+	
+     &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+ &lt;span class=&quot;nt&quot;&gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+ &lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
+ &lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;浏览 本地地址 http://localhost:8081/testforjsonp.htm 资源都能被访问到（同域当然能够访问）&lt;/p&gt;
+
+    &lt;p&gt;&lt;img src=&quot;https://cl.ly/01303s050J2S/Image%202017-02-24%20at%2001.04.36.png&quot; alt=&quot;&quot; /&gt;
+  &lt;img src=&quot;https://cl.ly/3F3k1d3A3r0l/Image%202017-02-24%20at%2001.12.56.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;把testforjsonp.htm中加载js的地址改下，放到另外的一个服务容器上面&lt;/p&gt;
+
+    &lt;p&gt;修改js用http地址来获取js：&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;   &amp;lt;script type=&quot;text/javascript&quot; src=&quot;http://localhost:8081/js/jquery-easyui-1.4.1/jquery.min.js&quot; &amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;p&gt;结果JavaScript的js资源能够正常加载，但是htm因为跨域原因浏览器报错，如下：&lt;/p&gt;
+
+    &lt;p&gt;&lt;img src=&quot;https://cl.ly/3B0y331d3x3s/Image%202017-02-24%20at%2001.23.25.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;把对应的ajax请求放在script请求资源的标签中&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;cp&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;html&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;lang=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;en&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;charset=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;UTF-8&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;title&amp;gt;&lt;/span&gt;test&lt;span class=&quot;nt&quot;&gt;&amp;lt;/title&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;script &lt;/span&gt;&lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text/javascript&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://localhost:8081/js/jquery-easyui-1.4.1/jquery.min.js&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/head&amp;gt;&lt;/span&gt;
+	
+	
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;body&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;script&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nx&quot;&gt;alert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;script &lt;/span&gt;&lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text/javascript&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://localhost:8081/json.jsp&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;p&gt;结果js加载资源能够正常的解析但由于json.jsp不是js的文本所欲报错&lt;/p&gt;
+
+    &lt;p&gt;&lt;img src=&quot;https://cl.ly/3o2k313s0S44/Image%202017-02-24%20at%2001.32.42.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;把对应的json.jsp包装成js的结构&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &amp;lt;%@page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+            pageEncoding=&quot;UTF-8&quot;%&amp;gt;
+	
+  &amp;lt;%
+      out.print(&quot;fun({\&quot;abc\&quot;:123})&quot;);
+  %&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;p&gt;在对应的testforjsonp.htm中定义对应的function方法fun:&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;cp&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;html&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;lang=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;en&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;charset=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;UTF-8&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;title&amp;gt;&lt;/span&gt;test&lt;span class=&quot;nt&quot;&gt;&amp;lt;/title&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;script &lt;/span&gt;&lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text/javascript&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://localhost:8081/js/jquery-easyui-1.4.1/jquery.min.js&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/head&amp;gt;&lt;/span&gt;
+	
+	
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;body&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;script&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nx&quot;&gt;alert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
+      &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fun&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;nx&quot;&gt;alert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;abc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;script &lt;/span&gt;&lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text/javascript&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://localhost:8081/json.jsp&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;p&gt;能够正常访问这个就是jsonp的原理！
+  &lt;img src=&quot;https://cl.ly/1z1Z0u3b3X36/Image%202017-02-24%20at%2001.41.21.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;用call来传递回调函数，实现跨域访问&lt;/p&gt;
+
+    &lt;p&gt;将json.jsp改写：&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &amp;lt;%@page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+            pageEncoding=&quot;UTF-8&quot;%&amp;gt;
+	
+  &amp;lt;%
+      String callback= request.getParameter(&quot;callback&quot;);
+      if (callback ==null|| &quot;&quot;.equals(callback)){
+          out.print(&quot;{\&quot;abc\&quot;:123}&quot;);
+      }
+      else {
+          out.print(callback+&quot;({\&quot;abc\&quot;:123})&quot;);
+      }
+  %&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;p&gt;testforjsonp.htm修改请求加入callback的参数：&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;      &lt;span class=&quot;cp&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;html&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;lang=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;en&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;charset=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;UTF-8&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;title&amp;gt;&lt;/span&gt;test&lt;span class=&quot;nt&quot;&gt;&amp;lt;/title&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;script &lt;/span&gt;&lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text/javascript&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://localhost:8081/js/jquery-easyui-1.4.1/jquery.min.js&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/head&amp;gt;&lt;/span&gt;
+	
+	
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;body&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;script&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nx&quot;&gt;alert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fun&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;nx&quot;&gt;alert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;abc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;script &lt;/span&gt;&lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text/javascript&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://localhost:8081/json.jsp?callback=fun&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;p&gt;&lt;img src=&quot;https://cl.ly/1z1Z0u3b3X36/Image%202017-02-24%20at%2001.41.21.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;在实际应用中使用JSONP&lt;/p&gt;
+
+    &lt;p&gt;很简单只需在用ajax提供请求把参数dataType改为jsonp即可&lt;/p&gt;
+
+    &lt;p&gt;testforjsonp.htm:&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;cp&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;html&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;lang=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;en&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;charset=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;UTF-8&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;title&amp;gt;&lt;/span&gt;test&lt;span class=&quot;nt&quot;&gt;&amp;lt;/title&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;script &lt;/span&gt;&lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text/javascript&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://localhost:8081/js/jquery-easyui-1.4.1/jquery.min.js&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/head&amp;gt;&lt;/span&gt;
+	
+	
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;body&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;script&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nx&quot;&gt;alert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//前面的jquery加载正常&lt;/span&gt;
+      &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ajax&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;POST&quot;&lt;/span&gt;  &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;dataType&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;  &lt;span class=&quot;s2&quot;&gt;&quot;jsonp&quot;&lt;/span&gt;   &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;url&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;http://localhost:8081/json.jsp&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;success&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;  &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+              &lt;span class=&quot;nx&quot;&gt;alert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;abc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;//能够正常返回json字符串&lt;/span&gt;
+          &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+	
+      &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;p&gt;&lt;img src=&quot;https://cl.ly/1m313K0W3s3w/Image%202017-02-24%20at%2002.00.49.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+        <pubDate>Thu, 23 Feb 2017 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2017/02/23/httprequestjsonp/</link>
+        <guid isPermaLink="true">http://localhost:4000/2017/02/23/httprequestjsonp/</guid>
+        
+        <category>实用教程</category>
+        
+        <category>java</category>
+        
+        <category>web</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>用KindEditor套件实现文件上传功能</title>
+        <description>&lt;blockquote&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;em&gt;本文记录使用KindEditor的web组件实现界面的头像文件上传服务器中，项目基本架构为 spring-mvc  +   spring  +   mybatis加上maven作为项目管理&lt;/em&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;h3 id=&quot;在项目工程中导入对应依赖上传工具包&quot;&gt;在项目工程中导入对应依赖上传工具包&lt;/h3&gt;
+    &lt;blockquote&gt;
+      &lt;p&gt;我这边使用的&lt;a href=&quot;http://maven.aliyun.com/nexus/#welcome&quot;&gt;阿里的maven远程中央库&lt;/a&gt;&lt;/p&gt;
+    &lt;/blockquote&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &amp;lt;!--上传组件依赖--&amp;gt;
+  &amp;lt;dependency&amp;gt;
+      &amp;lt;groupId&amp;gt;commons-fileupload&amp;lt;/groupId&amp;gt;
+      &amp;lt;artifactId&amp;gt;commons-fileupload&amp;lt;/artifactId&amp;gt;
+      &amp;lt;version&amp;gt;1.3.1&amp;lt;/version&amp;gt;
+  &amp;lt;/dependency&amp;gt;  
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;h3 id=&quot;在spring配置文件中注入对应的文件上传解析器&quot;&gt;在spring配置文件中注入对应的文件上传解析器&lt;/h3&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &amp;lt;!--文件上传解析器--&amp;gt;
+  &amp;lt;bean id=&quot;multipartResolver&quot;
+  class=&quot;org.springframework.web.multipart.commons.CommonsMultipartResolver&quot;&amp;gt;
+              &amp;lt;!--最大上传文件大小为5MB--&amp;gt;
+              &amp;lt;property name=&quot;maxUploadSize&quot; value=&quot;5242880&quot;/&amp;gt;
+  &amp;lt;/bean&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;h3 id=&quot;创建bean-class-picuploadresult&quot;&gt;创建bean Class PicUploadResult&lt;/h3&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  public class PicUploadResult {
+      private Integer error;
+      private String url;
+      private String width;
+      private String height;
+      public Integer getError() {
+          return error;
+      }
+      public void setError(Integer error) {
+          this.error = error;
+      }
+      public String getUrl() {
+          return url;
+      }
+      public void setUrl(String url) {
+          this.url = url;
+      }
+      public String getWidth() {
+          return width;
+      }
+      public void setWidth(String width) {
+          this.width = width;
+      }
+      public String getHeight() {
+          return height;
+      }
+      public void setHeight(String height) {
+          this.height = height;
+      }
+  }
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;h3 id=&quot;创建资源文件--imag_urlproperties&quot;&gt;创建资源文件  imag_url.properties&lt;/h3&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  REPOSITORY_PATH=/Users/liujunchen/Developer/JavaProject/liujipuzi/ljpz-upload
+  IMAGE_BASE_URL=http://localhost:8080
+  LJPZ_WEB_URL=http://localhost:8082
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;h3 id=&quot;创建controller-class--picuploadcontroller&quot;&gt;创建controller Class  PicUploadController&lt;/h3&gt;
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  package com.ljpz.web.controller;
+	
+  import com.fasterxml.jackson.databind.ObjectMapper;
+  import com.ljpz.common.bean.PicUploadResult;
+  import com.ljpz.web.service.PropertieService;
+  import org.apache.commons.lang3.RandomUtils;
+  import org.apache.commons.lang3.StringUtils;
+  import org.joda.time.DateTime;
+  import org.slf4j.Logger;
+  import org.slf4j.LoggerFactory;
+  import org.springframework.beans.factory.annotation.Autowired;
+  import org.springframework.http.MediaType;
+  import org.springframework.stereotype.Controller;
+  import org.springframework.web.bind.annotation.RequestMapping;
+  import org.springframework.web.bind.annotation.RequestMethod;
+  import org.springframework.web.bind.annotation.RequestParam;
+  import org.springframework.web.bind.annotation.ResponseBody;
+  import org.springframework.web.multipart.MultipartFile;
+  import javax.imageio.ImageIO;
+  import javax.servlet.http.HttpServletResponse;
+  import java.awt.image.BufferedImage;
+  import java.io.File;
+  import java.io.IOException;
+  import java.util.Date;
+	
+  /**
+   * 图片上传
+   */
+  @Controller
+  @RequestMapping(&quot;pic&quot;)
+  public class PicUploadController {
+      @Autowired
+      private PropertieService propertieService  ;
+	
+      private static final Logger LOGGER = LoggerFactory.getLogger(PicUploadController.class);
+	
+      private static final ObjectMapper mapper = new ObjectMapper();
+	
+      // 允许上传的格式
+      private static final String[] IMAGE_TYPE = new String[] { &quot;.bmp&quot;, &quot;.jpg&quot;, &quot;.jpeg&quot;, &quot;.gif&quot;, &quot;.png&quot;,&quot;.JPG&quot; };
+	
+      /**
+       * 制定相应的类型
+       * @param uploadFile
+       * @param response
+       * @return
+       * @throws Exception
+       */
+      @RequestMapping(value = &quot;/upload&quot;, method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
+      @ResponseBody
+      public String  upload (@RequestParam(&quot;uploadFile&quot;) MultipartFile uploadFile , HttpServletResponse response) throws Exception {
+	
+          // 校验图片格式
+          boolean isLegal = false;
+          for (String type : IMAGE_TYPE) {
+              if (StringUtils.endsWithIgnoreCase(uploadFile.getOriginalFilename(), type)) {
+                  isLegal = true;
+                  break;
+              }
+          }
+	
+          // 封装Result对象，并且将文件的byte数组放置到result对象中
+          PicUploadResult fileUploadResult = new PicUploadResult();
+	
+          // 状态
+          fileUploadResult.setError(isLegal ? 0 : 1);
+	
+          // 文件新路径
+          String filePath = getFilePath(uploadFile.getOriginalFilename());
+	
+          if (LOGGER.isDebugEnabled()) {
+              LOGGER.debug(&quot;Pic file upload .[{}] to [{}] .&quot;, uploadFile.getOriginalFilename(), filePath);
+          }
+	
+          // 生成图片的绝对引用地址
+          String picUrl = StringUtils.replace(StringUtils.substringAfter(filePath, propertieService.REPOSITORY_PATH), &quot;\\&quot;, &quot;/&quot;);
+          fileUploadResult.setUrl(propertieService.IMAGE_BASE_URL + picUrl);
+	
+          File newFile = new File(filePath);
+	
+          // 写文件到磁盘
+          uploadFile.transferTo(newFile);
+	
+          // 校验图片是否合法
+          isLegal = false;
+          try {
+              BufferedImage image = ImageIO.read(newFile);
+              if (image != null) {
+                  fileUploadResult.setWidth(image.getWidth() + &quot;&quot;);
+                  fileUploadResult.setHeight(image.getHeight() + &quot;&quot;);
+                  isLegal = true;
+              }
+          } catch (IOException e) {
+          }
+	
+          // 状态
+          fileUploadResult.setError(isLegal ? 0 : 1);
+	
+          if (!isLegal) {
+              // 不合法，将磁盘上的文件删除
+              newFile.delete();
+          }
+	
+          //将java对象序列化成Json字符串
+          return mapper.writeValueAsString(fileUploadResult);
+      }
+	
+      private String getFilePath(String sourceFileName) {
+          String baseFolder = &quot;/Users/liujunchen/Developer/JavaProject/liujipuzi/ljpz-upload&quot; + File.separator + &quot;images&quot;;
+          Date nowDate = new Date();
+          // yyyy/MM/dd
+          String fileFolder = baseFolder + File.separator + new DateTime(nowDate).toString(&quot;yyyy&quot;) + File.separator + new DateTime(nowDate).toString(&quot;MM&quot;) + File.separator
+                  + new DateTime(nowDate).toString(&quot;dd&quot;);
+          File file = new File(fileFolder);
+          if (!file.isDirectory()) {
+              // 如果目录不存在，则创建目录
+              file.mkdirs();
+          }
+          // 生成新的文件名
+          String fileName = new DateTime(nowDate).toString(&quot;yyyyMMddhhmmssSSSS&quot;) + RandomUtils.nextInt(100, 9999) + &quot;.&quot; + StringUtils.substringAfterLast(sourceFileName, &quot;.&quot;);
+          return fileFolder + File.separator + fileName;
+      }
+	
+  }
+	
+	
+	
+	
+  * 在test的类里注射spring bean测试程序如下：
+	
+			
+          @RunWith(SpringJUnit4ClassRunner.class)
+          //加载配置文件
+          @ContextConfiguration
+                  ({&quot;/spring/applicationContext.xml&quot;,&quot;/spring/applicationContext-mybatis.xml&quot;})
+          public class UserinfoServiceTest {
+              private   static  final ObjectMapper   MAPPER = new ObjectMapper()   ;
+              private   String  tojson   ;
+              @Resource
+              private   UserinfoService  userinfoService ;
+			
+              @Before
+              public void setTojson() throws Exception {
+                  //准备一条测试数据
+                  this.tojson= MAPPER.writeValueAsString(
+                          new Userinfo( new Long(109),&quot;junchen-test222&quot;,  &quot;1&quot;,  new Date(),
+                                  &quot;刘俊辰&quot;,  &quot;大海&quot;, null, &quot;1&quot;, &quot;100000000&quot;, &quot;310107&quot;, &quot;本科&quot;, &quot;计算机test&quot;));
+              }
+              @Test
+              public void createUserinfo() throws Exception {
+                  userinfoService.createUserinfo(tojson)  ;
+			
+              }
+			
+              @Test
+              public void updateUserinfo() throws Exception {
+			
+                   userinfoService.updateUserinfo(tojson);
+              }
+			
+              @Test
+              public void queryByNickname() throws Exception {
+			
+                 /* 传统办法
+                  ApplicationContext applicationContext = new ClassPathXmlApplicationContext(
+                          &quot;spring/applicationContext.xml&quot;,&quot;spring/applicationContext-mybatis.xml&quot;);
+                  UserinfoService  userinfoService=
+                          applicationContext.getBean(&quot;userinfoService&quot;,UserinfoService.class)  ;*/
+			
+                  Userinfo userinfo   =  userinfoService.queryByNickname(new Long(9));
+                  System.out.println(userinfo.toString());
+	
+      }
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;h3 id=&quot;在页面导入css以及kindedit工具js&quot;&gt;在页面导入css以及kindedit工具js&lt;/h3&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &amp;lt;%--上传组件--%&amp;gt;
+  &amp;lt;link rel=&quot;stylesheet&quot; href=&quot;/js/kindeditor-4.1.7/themes/default/default.css&quot; /&amp;gt;
+  &amp;lt;script src=&quot;/js/kindeditor-4.1.7/kindeditor-min.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;h3 id=&quot;在页面中添加js代码自己也是刚刚接触前段简要的注释下调用的js过程&quot;&gt;在页面中添加js代码（自己也是刚刚接触前段简要的注释下调用的js过程）&lt;/h3&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &amp;lt;script&amp;gt;
+         $(function() {
+          var uploadbutton = KindEditor.uploadbutton({
+              button : $('#uploadButton')[0],//上传button按钮
+              fieldName : 'uploadFile',//类型为uploadFile这个是富文本插件参数
+              url : '/service/pic/upload?dir=image',//送请求响应地址
+                      afterUpload : function(data) {
+                          if (data.error === 0) {
+                              var url = KindEditor.formatUrl(data.url, 'absolute');
+                              var tagurl= &quot;&amp;lt;img id='bigImage' name='bigImage' alt=''  width='150' height='150' src='&quot;+url+&quot;'&amp;gt;&quot;;
+                              var   img2url   = &quot;&amp;lt;img id='midImage' width='100' height='100' name='midImage' src='&quot;+ url   + &quot;'&amp;gt;&quot;
+                              var   img3url   = &quot;&amp;lt;img id='smaImage' width='50' height='50' name='smaImage' src='&quot;+ url   + &quot;'&amp;gt;&quot;
+                              $('#url').val(url);
+                              //在网页中添加更新上传头像
+                              $(&quot;.img-b&quot;).html(tagurl)  ;
+                              $(&quot;.img-s&quot;).eq(0).html(img2url)  ;
+                              $(&quot;.img-s&quot;).eq(1).html(img3url)  ;
+                          } else {
+                              alert(data.message);
+                  }
+              },
+              afterError : function(str) {
+                  alert('自定义错误信息: ' + str);
+              }
+          });
+          uploadbutton.fileBox.change(function(e) {
+              uploadbutton.submit();
+          });
+      });
+  &amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;h3 id=&quot;js成功调用截图&quot;&gt;js成功调用截图&lt;/h3&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://cl.ly/0o0U1A073S2I/Image%202017-02-23%20at%2010.19.41.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 21 Feb 2017 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2017/02/21/imageupload/</link>
+        <guid isPermaLink="true">http://localhost:4000/2017/02/21/imageupload/</guid>
+        
+        <category>实用教程</category>
+        
+        <category>java</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>用junit测试单个服务调用</title>
+        <description>&lt;blockquote&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;em&gt;spring测试很费劲需要初始化bean才能进行测试， 这边介绍spring-test 配合junit来完成对应service的接口测试&lt;/em&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;测试环境搭建过程&quot;&gt;测试环境搭建过程&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;我本机环境是2014年 retina mac pro,编程工具为idea，项目中用的是maven，所以下面的介绍是基于maven的。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;在maven中添加对应spring 的测试的依赖包&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &amp;lt;dependency&amp;gt;
+      &amp;lt;groupId&amp;gt;junit&amp;lt;/groupId&amp;gt;
+      &amp;lt;artifactId&amp;gt;junit&amp;lt;/artifactId&amp;gt;
+  &amp;lt;/dependency&amp;gt;
+
+       &amp;lt;dependency&amp;gt;
+              &amp;lt;groupId&amp;gt;org.springframework&amp;lt;/groupId&amp;gt;
+              &amp;lt;artifactId&amp;gt;spring-test&amp;lt;/artifactId&amp;gt;
+              &amp;lt;version&amp;gt;4.1.3.RELEASE&amp;lt;/version&amp;gt;
+          &amp;lt;/dependency&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;找到测试类添加如下的注解注入bean&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;          @RunWith(SpringJUnit4ClassRunner.class)
+          //加载配置文件
+          @ContextConfiguration
+                  ({&quot;/spring/applicationContext.xml&quot;,&quot;/spring/applicationContext-mybatis.xml&quot;})
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;在test的类里注射spring bean测试程序如下：&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  @RunWith(SpringJUnit4ClassRunner.class)
+  //加载配置文件
+  @ContextConfiguration
+          ({&quot;/spring/applicationContext.xml&quot;,&quot;/spring/applicationContext-mybatis.xml&quot;})
+  public class UserinfoServiceTest {
+      private   static  final ObjectMapper   MAPPER = new ObjectMapper()   ;
+      private   String  tojson   ;
+      @Resource
+      private   UserinfoService  userinfoService ;
+	
+      @Before
+      public void setTojson() throws Exception {
+          //准备一条测试数据
+          this.tojson= MAPPER.writeValueAsString(
+                  new Userinfo( new Long(109),&quot;junchen-test222&quot;,  &quot;1&quot;,  new Date(),
+                          &quot;刘俊辰&quot;,  &quot;大海&quot;, null, &quot;1&quot;, &quot;100000000&quot;, &quot;310107&quot;, &quot;本科&quot;, &quot;计算机test&quot;));
+      }
+      @Test
+      public void createUserinfo() throws Exception {
+          userinfoService.createUserinfo(tojson)  ;
+	
+      }
+	
+      @Test
+      public void updateUserinfo() throws Exception {
+	
+           userinfoService.updateUserinfo(tojson);
+      }
+	
+      @Test
+      public void queryByNickname() throws Exception {
+	
+         /* 传统办法
+          ApplicationContext applicationContext = new ClassPathXmlApplicationContext(
+                  &quot;spring/applicationContext.xml&quot;,&quot;spring/applicationContext-mybatis.xml&quot;);
+          UserinfoService  userinfoService=
+                  applicationContext.getBean(&quot;userinfoService&quot;,UserinfoService.class)  ;*/
+	
+          Userinfo userinfo   =  userinfoService.queryByNickname(new Long(9));
+          System.out.println(userinfo.toString());
+
+  }
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;运行你想运行test的程序就行。&lt;/p&gt;
+
+    &lt;p&gt;&lt;img src=&quot;https://cl.ly/2A3d0T1u2q1h/Image%202017-02-21%20at%2001.13.34.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+        <pubDate>Mon, 20 Feb 2017 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2017/02/20/springtest-configuration/</link>
+        <guid isPermaLink="true">http://localhost:4000/2017/02/20/springtest-configuration/</guid>
+        
+        <category>实用教程</category>
+        
+        <category>java</category>
+        
+        
+      </item>
     
       <item>
         <title>2017nba全明星东部先发盘点</title>
