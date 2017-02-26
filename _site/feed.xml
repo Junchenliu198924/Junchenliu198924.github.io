@@ -5,15 +5,263 @@
     <description>techbolg record mylife</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 24 Feb 2017 12:14:00 +0800</pubDate>
-    <lastBuildDate>Fri, 24 Feb 2017 12:14:00 +0800</lastBuildDate>
+    <pubDate>Sun, 26 Feb 2017 22:53:11 +0800</pubDate>
+    <lastBuildDate>Sun, 26 Feb 2017 22:53:11 +0800</lastBuildDate>
     <generator>Jekyll v3.4.0</generator>
+    
+      <item>
+        <title>java-web跨域请求解决方案-httpclient</title>
+        <description>&lt;blockquote&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;em&gt;最近一直在学习前段的一些基本前端编程技巧，对于http请求资源的解决方法比较普遍的两种，一种是JSONP，还有另外一种就是今天要介绍的httpclient工具，httpclient是apach基金协会的一个顶级的开源项目&lt;/em&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;1httpclient工具发送请求getpost&quot;&gt;1、httpclient工具发送请求（get/post）&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;在maven中添加httpclient所用的到的对应工具包：&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &amp;lt;dependency&amp;gt;
+   		&amp;lt;groupId&amp;gt;org.apache.httpcomponents&amp;lt;/groupId&amp;gt;
+   		&amp;lt;artifactId&amp;gt;httpclient&amp;lt;/artifactId&amp;gt;
+   		&amp;lt;version&amp;gt;4.3.5&amp;lt;/version&amp;gt;
+   	&amp;lt;/dependency&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;httpclient发送get请求：&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; package cn.itcast.httpclient;
+	
+ import java.net.URI;
+	
+ import org.apache.http.client.methods.CloseableHttpResponse;
+ import org.apache.http.client.methods.HttpGet;
+ import org.apache.http.client.utils.URIBuilder;
+ import org.apache.http.impl.client.CloseableHttpClient;
+ import org.apache.http.impl.client.HttpClients;
+ import org.apache.http.util.EntityUtils;
+	
+ public class DoGETParam {
+	
+     public static void main(String[] args) throws Exception {
+	
+         // 创建Httpclient对象
+         CloseableHttpClient httpclient = HttpClients.createDefault();
+	
+         // 定义请求的参数
+         URI uri = new URIBuilder(&quot;http://www.baidu.com/s&quot;).setParameter(&quot;wd&quot;, &quot;java&quot;).build();
+	
+         System.out.println(uri);
+	
+         // 创建http GET请求
+         HttpGet httpGet = new HttpGet(uri);
+	
+         CloseableHttpResponse response = null;
+         try {
+             // 执行请求
+             response = httpclient.execute(httpGet);
+             // 判断返回状态是否为200
+             if (response.getStatusLine().getStatusCode() == 200) {
+                 String content = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
+                 System.out.println(content);
+             }
+         } finally {
+             if (response != null) {
+                 response.close();
+             }
+             httpclient.close();
+         }
+	
+     }
+	
+ }
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;httpclient发送post请求：&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  package cn.itcast.httpclient;
+  import java.util.ArrayList;
+  import java.util.List;
+	
+  import org.apache.http.NameValuePair;
+  import org.apache.http.client.entity.UrlEncodedFormEntity;
+  import org.apache.http.client.methods.CloseableHttpResponse;
+  import org.apache.http.client.methods.HttpPost;
+  import org.apache.http.impl.client.CloseableHttpClient;
+  import org.apache.http.impl.client.HttpClients;
+  import org.apache.http.message.BasicNameValuePair;
+  import org.apache.http.util.EntityUtils;
+	
+  public class DoPOSTParam {
+  public static void main(String[] args) throws Exception {
+          // 创建Httpclient对象
+          CloseableHttpClient httpclient = HttpClients.createDefault();
+          // 创建http POST请求
+          HttpPost httpPost = new HttpPost(&quot;http://www.oschina.net/search&quot;);
+          // 设置2个post参数，一个是scope、一个是q
+          List&amp;lt;NameValuePair&amp;gt; parameters = new ArrayList&amp;lt;NameValuePair&amp;gt;(0);
+          parameters.add(new BasicNameValuePair(&quot;scope&quot;, &quot;project&quot;));
+          parameters.add(new BasicNameValuePair(&quot;q&quot;, &quot;java&quot;));
+          // 构造一个form表单式的实体
+          UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(parameters);
+          // 将请求实体设置到httpPost对象中
+          httpPost.setEntity(formEntity);
+          CloseableHttpResponse response = null;
+          try {
+              // 执行请求
+              response = httpclient.execute(httpPost);
+              // 判断返回状态是否为200
+              if (response.getStatusLine().getStatusCode() == 200) {
+                  String content = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
+                  System.out.println(content);
+              }
+          } finally {
+              if (response != null) {
+                  response.close();
+              }
+              httpclient.close();
+          }
+	
+      }
+	
+  }
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;建立httpclient的连接池&lt;/p&gt;
+
+    &lt;p&gt;public class HttpConnectManager {&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  public static void main(String[] args) throws Exception {
+      PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
+      // 设置最大连接数
+      cm.setMaxTotal(200);
+      // 设置每个主机地址的并发数
+      cm.setDefaultMaxPerRoute(20);
+      doGet(cm);
+      doGet(cm);
+  }
+
+  public static void doGet(HttpClientConnectionManager cm) throws Exception {
+      //从连接池中哪一个对应的连接
+      CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(cm).build();
+      // 创建http GET请求
+      HttpGet httpGet = new HttpGet(&quot;http://www.baidu.com/&quot;);
+
+      CloseableHttpResponse response = null;
+      try {
+          // 执行请求
+          response = httpClient.execute(httpGet);
+          // 判断返回状态是否为200
+          if (response.getStatusLine().getStatusCode() == 200) {
+              String content = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
+              System.out.println(&quot;内容长度：&quot; + content.length());
+          }
+      } finally {
+          if (response != null) {
+              response.close();
+          }
+          // 此处不能关闭httpClient，如果关闭httpClient，连接池也会销毁
+          // httpClient.close();
+      }
+  }
+  }
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;建立一个自动校验的类型&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  package cn.itcast.httpclient;
+	
+  import org.apache.http.conn.HttpClientConnectionManager;
+  import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+	
+  /**
+   * 单独请求对应的方法来关闭对应的请求连接
+   *
+   *
+   */
+  public class ClientEvictExpiredConnections {
+	
+      public static void main(String[] args) throws Exception {
+          PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
+          // 设置最大连接数
+          cm.setMaxTotal(200);
+          // 设置每个主机地址的并发数
+          cm.setDefaultMaxPerRoute(20);
+	
+          new IdleConnectionEvictor(cm).start();
+      }
+	
+      public static class IdleConnectionEvictor extends Thread {
+	
+          private final HttpClientConnectionManager connMgr;
+	
+          private volatile boolean shutdown;
+	
+          public IdleConnectionEvictor(HttpClientConnectionManager connMgr) {
+              this.connMgr = connMgr;
+          }
+	
+          @Override
+          public void run() {
+              try {
+                  while (!shutdown) {
+                      synchronized (this) {
+                          wait(5000);
+                          // 关闭失效的连接
+                          connMgr.closeExpiredConnections();
+                      }
+                  }
+              } catch (InterruptedException ex) {
+                  // 结束
+              }
+          }
+	
+          public void shutdown() {
+              shutdown = true;
+              synchronized (this) {
+                  notifyAll();
+              }
+          }
+  }
+  }
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;工具包整合httpclient&quot;&gt;工具包整合httpclient&lt;/h3&gt;
+
+</description>
+        <pubDate>Sun, 26 Feb 2017 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2017/02/26/httprequesthttpclient/</link>
+        <guid isPermaLink="true">http://localhost:4000/2017/02/26/httprequesthttpclient/</guid>
+        
+        <category>实用教程</category>
+        
+        <category>java</category>
+        
+        <category>web</category>
+        
+        
+      </item>
     
       <item>
         <title>java-web跨域请求解决方案-jsonp</title>
         <description>&lt;blockquote&gt;
   &lt;ul&gt;
-    &lt;li&gt;&lt;em&gt;最近一直在学习前段的一些基本变成技巧，对于http请求资源的解决方法比较普遍的两种，一种就是今天分享的JSONP，还有另外一种就是通过服务器端httpclient工具包进行请求获取资源（明天的内容有了~）&lt;/em&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;em&gt;最近一直在学习前端的一些基本编程技巧，对于http请求资源的解决方法比较普遍的两种，一种就是今天分享的JSONP，还有另外一种就是通过服务器端httpclient工具包进行请求获取资源（明天的内容有了~）&lt;/em&gt;&lt;/li&gt;
   &lt;/ul&gt;
 &lt;/blockquote&gt;
 

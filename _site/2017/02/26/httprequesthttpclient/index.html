@@ -10,9 +10,9 @@
     <meta name="keyword"  content="">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>2017nba全明星西部先发盘点 - Supremeliu Blog</title>
+    <title>java-web跨域请求解决方案-httpclient - Supremeliu Blog</title>
 
-    <link rel="canonical" href="http://localhost:4000/2017/02/18/chat-NBA/">
+    <link rel="canonical" href="http://localhost:4000/2017/02/26/httprequesthttpclient/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -125,12 +125,12 @@
 
     <!-- Image to hack wechat -->
 <!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
-<!-- <img src="/img/2017-02-19-allstar.jpg" width="0" height="0"> -->
+<!-- <img src="/img/ie_sifhay7o-john-cobb.jpg" width="0" height="0"> -->
 
 <!-- Post Header -->
 <style type="text/css">
     header.intro-header{
-        background-image: url('/img/2017-02-19-allstar.jpg')
+        background-image: url('/img/ie_sifhay7o-john-cobb.jpg')
     }
 </style>
 <header class="intro-header" >
@@ -140,15 +140,19 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#篮球" title="篮球">篮球</a>
+                        <a class="tag" href="/tags/#实用教程" title="实用教程">实用教程</a>
+                        
+                        <a class="tag" href="/tags/#java" title="java">java</a>
+                        
+                        <a class="tag" href="/tags/#web" title="web">web</a>
                         
                     </div>
-                    <h1>2017nba全明星西部先发盘点</h1>
+                    <h1>java-web跨域请求解决方案-httpclient</h1>
                     
                     
-                    <h2 class="subheading">NBA全明星个人客观失实点评系列</h2>
+                    <h2 class="subheading">java web功能实现笔记</h2>
                     
-                    <span class="meta">Posted by Supremeliu on February 18, 2017</span>
+                    <span class="meta">Posted by Supremeliu on February 26, 2017</span>
                 </div>
             </div>
         </div>
@@ -168,51 +172,235 @@
 
 				<blockquote>
   <ul>
-    <li><em>2017年nba全明星如期而至，现在的nba很疯狂，快速~进攻是nba的主题，下面我就谈谈个人对于本届全明星10首发的看法</em></li>
+    <li><em>最近一直在学习前段的一些基本前端编程技巧，对于http请求资源的解决方法比较普遍的两种，一种是JSONP，还有另外一种就是今天要介绍的httpclient工具，httpclient是apach基金协会的一个顶级的开源项目</em></li>
   </ul>
 </blockquote>
 
-<h1 id="西部">西部</h1>
+<hr />
 
-<h2 id="后卫-斯蒂芬库里">后卫 斯蒂芬.库里</h2>
+<h3 id="1httpclient工具发送请求getpost">1、httpclient工具发送请求（get/post）</h3>
 
-<p><img src="https://cl.ly/140s2t3p1S0B/Image%202017-02-19%20at%2001.25.49.jpg" alt="" /></p>
+<ul>
+  <li>
+    <p>在maven中添加httpclient所用的到的对应工具包：</p>
 
-<p>看图就知道他的杀手锏，不用多说，他是继艾弗森之后又一个改变我对于篮球理解的球星。</p>
+    <div class="highlighter-rouge"><pre class="highlight"><code> &lt;dependency&gt;
+   		&lt;groupId&gt;org.apache.httpcomponents&lt;/groupId&gt;
+   		&lt;artifactId&gt;httpclient&lt;/artifactId&gt;
+   		&lt;version&gt;4.3.5&lt;/version&gt;
+   	&lt;/dependency&gt;
+</code></pre>
+    </div>
+  </li>
+  <li>
+    <p>httpclient发送get请求：</p>
 
-<p>个人技巧方面来看他的投篮并不是教科书般的标准，但是这正是他的一大杀手锏，出手点偏低但异常迅速、与生俱来的柔和的手感，定点或者接球三分nba里面他不一定是最棒的，但我确定他一定是持球三分历史以来最好的球员没有之一。他的运球很棒没有欧文那样”骚气”但是确是nba最好的，刻苦有针对性的训练让他人球合一，有些人或许会质疑库里是不是球风偏软，在我看来强硬了就不是库里了，他的打法如水很柔让人看起来很舒服，其实我觉得保持这样的球风是要付出受伤代价的，但是如果把自己身体力量练上去了势必会失去灵动，两者没有办法兼得，上赛季的库里真的不可思议。今年维斯的落选很冤，但是库里的球风独一无二他首发我没意见。</p>
+    <div class="highlighter-rouge"><pre class="highlight"><code> package cn.itcast.httpclient;
+	
+ import java.net.URI;
+	
+ import org.apache.http.client.methods.CloseableHttpResponse;
+ import org.apache.http.client.methods.HttpGet;
+ import org.apache.http.client.utils.URIBuilder;
+ import org.apache.http.impl.client.CloseableHttpClient;
+ import org.apache.http.impl.client.HttpClients;
+ import org.apache.http.util.EntityUtils;
+	
+ public class DoGETParam {
+	
+     public static void main(String[] args) throws Exception {
+	
+         // 创建Httpclient对象
+         CloseableHttpClient httpclient = HttpClients.createDefault();
+	
+         // 定义请求的参数
+         URI uri = new URIBuilder("http://www.baidu.com/s").setParameter("wd", "java").build();
+	
+         System.out.println(uri);
+	
+         // 创建http GET请求
+         HttpGet httpGet = new HttpGet(uri);
+	
+         CloseableHttpResponse response = null;
+         try {
+             // 执行请求
+             response = httpclient.execute(httpGet);
+             // 判断返回状态是否为200
+             if (response.getStatusLine().getStatusCode() == 200) {
+                 String content = EntityUtils.toString(response.getEntity(), "UTF-8");
+                 System.out.println(content);
+             }
+         } finally {
+             if (response != null) {
+                 response.close();
+             }
+             httpclient.close();
+         }
+	
+     }
+	
+ }
+</code></pre>
+    </div>
+  </li>
+  <li>
+    <p>httpclient发送post请求：</p>
 
-<h2 id="后卫-詹姆斯哈登">后卫 詹姆斯.哈登</h2>
+    <div class="highlighter-rouge"><pre class="highlight"><code>  package cn.itcast.httpclient;
+  import java.util.ArrayList;
+  import java.util.List;
+	
+  import org.apache.http.NameValuePair;
+  import org.apache.http.client.entity.UrlEncodedFormEntity;
+  import org.apache.http.client.methods.CloseableHttpResponse;
+  import org.apache.http.client.methods.HttpPost;
+  import org.apache.http.impl.client.CloseableHttpClient;
+  import org.apache.http.impl.client.HttpClients;
+  import org.apache.http.message.BasicNameValuePair;
+  import org.apache.http.util.EntityUtils;
+	
+  public class DoPOSTParam {
+  public static void main(String[] args) throws Exception {
+          // 创建Httpclient对象
+          CloseableHttpClient httpclient = HttpClients.createDefault();
+          // 创建http POST请求
+          HttpPost httpPost = new HttpPost("http://www.oschina.net/search");
+          // 设置2个post参数，一个是scope、一个是q
+          List&lt;NameValuePair&gt; parameters = new ArrayList&lt;NameValuePair&gt;(0);
+          parameters.add(new BasicNameValuePair("scope", "project"));
+          parameters.add(new BasicNameValuePair("q", "java"));
+          // 构造一个form表单式的实体
+          UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(parameters);
+          // 将请求实体设置到httpPost对象中
+          httpPost.setEntity(formEntity);
+          CloseableHttpResponse response = null;
+          try {
+              // 执行请求
+              response = httpclient.execute(httpPost);
+              // 判断返回状态是否为200
+              if (response.getStatusLine().getStatusCode() == 200) {
+                  String content = EntityUtils.toString(response.getEntity(), "UTF-8");
+                  System.out.println(content);
+              }
+          } finally {
+              if (response != null) {
+                  response.close();
+              }
+              httpclient.close();
+          }
+	
+      }
+	
+  }
+</code></pre>
+    </div>
+  </li>
+  <li>
+    <p>建立httpclient的连接池</p>
 
-<p><img src="https://cl.ly/0z3d2q0B3F2M/Image%202017-02-19%20at%2001.27.18.jpg" alt="" /></p>
+    <p>public class HttpConnectManager {</p>
 
-<p>标志性动作撒点盐~就如广告中所宣传的一样，哈登确实很独特，本赛季脱离了场外的纷纷扰扰~系统训练后的夜店登表现出了mvp的竞争力。</p>
+    <div class="highlighter-rouge"><pre class="highlight"><code>  public static void main(String[] args) throws Exception {
+      PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
+      // 设置最大连接数
+      cm.setMaxTotal(200);
+      // 设置每个主机地址的并发数
+      cm.setDefaultMaxPerRoute(20);
+      doGet(cm);
+      doGet(cm);
+  }
 
-<p>个人技巧方面哈登独步武林的秘诀我觉得应该就是他的节奏了。本赛季打组织的他有了更多的球权让他把这个特点发挥了更大的作用。我自己也在研究他的节奏独特的原因，个人分析原因有二，一是他是左手球员对于大多数人来说看左手球员多多少少有点不习惯，其次我想应该是和他自己突破的风格有很大的关系，哈登喜欢身体接触并且会利用身体接触后急停或者再发力来制造得分的机会，和库里的持球三分一样~哈登的黏人碰瓷打法确实也是独一无二。</p>
+  public static void doGet(HttpClientConnectionManager cm) throws Exception {
+      //从连接池中哪一个对应的连接
+      CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(cm).build();
+      // 创建http GET请求
+      HttpGet httpGet = new HttpGet("http://www.baidu.com/");
 
-<h2 id="前锋-凯文杜兰特">前锋 凯文.杜兰特</h2>
+      CloseableHttpResponse response = null;
+      try {
+          // 执行请求
+          response = httpClient.execute(httpGet);
+          // 判断返回状态是否为200
+          if (response.getStatusLine().getStatusCode() == 200) {
+              String content = EntityUtils.toString(response.getEntity(), "UTF-8");
+              System.out.println("内容长度：" + content.length());
+          }
+      } finally {
+          if (response != null) {
+              response.close();
+          }
+          // 此处不能关闭httpClient，如果关闭httpClient，连接池也会销毁
+          // httpClient.close();
+      }
+  }
+  }
+</code></pre>
+    </div>
+  </li>
+  <li>
+    <p>建立一个自动校验的类型</p>
 
-<p><img src="https://cl.ly/3O1a2e11123R/Image%202017-02-19%20at%2001.56.45.jpg" alt="" /></p>
+    <div class="highlighter-rouge"><pre class="highlight"><code>  package cn.itcast.httpclient;
+	
+  import org.apache.http.conn.HttpClientConnectionManager;
+  import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+	
+  /**
+   * 单独请求对应的方法来关闭对应的请求连接
+   *
+   *
+   */
+  public class ClientEvictExpiredConnections {
+	
+      public static void main(String[] args) throws Exception {
+          PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
+          // 设置最大连接数
+          cm.setMaxTotal(200);
+          // 设置每个主机地址的并发数
+          cm.setDefaultMaxPerRoute(20);
+	
+          new IdleConnectionEvictor(cm).start();
+      }
+	
+      public static class IdleConnectionEvictor extends Thread {
+	
+          private final HttpClientConnectionManager connMgr;
+	
+          private volatile boolean shutdown;
+	
+          public IdleConnectionEvictor(HttpClientConnectionManager connMgr) {
+              this.connMgr = connMgr;
+          }
+	
+          @Override
+          public void run() {
+              try {
+                  while (!shutdown) {
+                      synchronized (this) {
+                          wait(5000);
+                          // 关闭失效的连接
+                          connMgr.closeExpiredConnections();
+                      }
+                  }
+              } catch (InterruptedException ex) {
+                  // 结束
+              }
+          }
+	
+          public void shutdown() {
+              shutdown = true;
+              synchronized (this) {
+                  notifyAll();
+              }
+          }
+  }
+  }
+</code></pre>
+    </div>
+  </li>
+</ul>
 
-<p>本赛季加盟勇士，杜兰特变得更加的高效。</p>
-
-<p>单打永远给人一种错位的感觉，超高的出手高度，那么高的身高还拥有较好的持球突破，如果硬是要找点缺点的话那就是长得还不是很有腔调吧。我看杜兰特比赛的时候一直有种感觉就是到了最后才发现他得了30多分啊~心里却嘀咕着他没怎么打~这就是杜兰特，全面而高效。</p>
-
-<h2 id="前锋-考瓦伊-莱昂纳德">前锋 考瓦伊-莱昂纳德</h2>
-
-<p><img src="https://cl.ly/25183A3U1v22/Image%202017-02-19%20at%2002.16.07.jpg" alt="" /></p>
-
-<p>GDP言传身教，再加上波波的指点让他好像没有经历过年轻打法直接过度到了最为实用的球风。</p>
-
-<p>卡哇伊的臂展也是长的过分，个人的防守是他的一大法宝，身体素质一流。进攻方面今年的卡哇伊更加的高效，在如今联盟三分小球风暴横行，背身单打跳投的两分技术这项技术被很多人遗忘，没关系联盟还有卡哇伊 和猛龙的德罗赞的，卡哇伊的主要进攻手段就像马刺一样经典，背身靠打让我依稀看到了乔丹的影子。能力已经具备，但是他还需要学习如何去当一个领袖。</p>
-
-<h2 id="前锋中锋-安东尼-戴维斯">前锋/中锋 安东尼-戴维斯</h2>
-
-<p><img src="https://cl.ly/3e061y2G3439/Image%202017-02-19%20at%2002.34.08.jpg" alt="" /></p>
-
-<p>浓眉哥现代篮球打法nba中最好的中锋。</p>
-
-<p>个人技巧方面他的投篮移动防守能力都是nba顶尖水平，本赛季个人数据非常好看。无奈队友有点坑啊~他有一手中投，移动好，攻防两端的强点。但是他确实缺失了背打这项我认为一个伟大中锋必须拥有的技能，或许时代变了背打这项技术用的越来越少，但是个人为最难篮球技巧是个人跳投和背身单打。</p>
+<h3 id="工具包整合httpclient">工具包整合httpclient</h3>
 
 
 
@@ -223,17 +411,13 @@
                 </style>
                 <div class="ds-share"
                     style="text-align: right"
-                    data-thread-key="/2017/02/18/chat-NBA"
-                    data-title="2017nba全明星西部先发盘点"
-                    data-url="http://localhost:4000/2017/02/18/chat-NBA/"
-                    data-images="http://localhost:4000/img/2017-02-19-allstar.jpg"
+                    data-thread-key="/2017/02/26/httprequesthttpclient"
+                    data-title="java-web跨域请求解决方案-httpclient"
+                    data-url="http://localhost:4000/2017/02/26/httprequesthttpclient/"
+                    data-images="http://localhost:4000/img/ie_sifhay7o-john-cobb.jpg"
                     data-content="
   
-    2017年nba全明星如期而至，现在的nba很疯狂，快速~进攻是nba的主题，下面我就谈谈个人对于本届全明星10首发的看法
-  
-
-
-西部... | Supremeliu Blog " >
+    最近一直在学习前段的一些基本前端编程技巧，对于http请求资源的解决方法比较普遍的两种，一种是JSONP，还有另外一种就是今天要介绍的ht... | Supremeliu Blog " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
                         <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -253,13 +437,9 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2017/02/17/jekyll-addMusic/" data-toggle="tooltip" data-placement="top" title="Jekyll在博客页面中添加网易云音乐播放">&larr; Previous Post</a>
+                        <a href="/2017/02/23/httprequestjsonp/" data-toggle="tooltip" data-placement="top" title="java-web跨域请求解决方案-jsonp">&larr; Previous Post</a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/2017/02/19/chat-NBA-2/" data-toggle="tooltip" data-placement="top" title="2017nba全明星东部先发盘点">Next Post &rarr;</a>
-                    </li>
                     
                 </ul>
 
@@ -270,9 +450,9 @@
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                        data-thread-key="/2017/02/18/chat-NBA"
-                        data-title="2017nba全明星西部先发盘点"
-                        data-url="http://localhost:4000/2017/02/18/chat-NBA/" >
+                        data-thread-key="/2017/02/26/httprequesthttpclient"
+                        data-title="java-web跨域请求解决方案-httpclient"
+                        data-url="http://localhost:4000/2017/02/26/httprequesthttpclient/" >
                     </div>
                 </div>
                 <!-- 多说评论框 end -->
@@ -290,9 +470,6 @@
 
 
                 <!--网易云音乐变量为page.music-id  变量为播放歌曲的序列号-->
-
-                
-               <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=1&id=408294&auto=1&height=32"></iframe>
 
                 
                 <!-- Featured Tags -->
