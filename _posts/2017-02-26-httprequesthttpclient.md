@@ -167,7 +167,7 @@ tags:
 		}
 	
 	
-* 建立一个自动校验的类型
+* 需要创建一个线程thread自动校验清理无效连接
 		
 		package cn.itcast.httpclient;
 		
@@ -226,8 +226,107 @@ tags:
 		}
 
 
-### 工具包整合httpclient
+### 2、httpclient建立连接时几个比较重要的参数config
+	package cn.itcast.httpclient;
+	
+	import org.apache.http.client.config.RequestConfig;
+	import org.apache.http.client.methods.CloseableHttpResponse;
+	import org.apache.http.client.methods.HttpGet;
+	import org.apache.http.impl.client.CloseableHttpClient;
+	import org.apache.http.impl.client.HttpClients;
+	import org.apache.http.util.EntityUtils;
+	
+	public class RequestConfigDemo {
+	
+	    public static void main(String[] args) throws Exception {
+	
+	        // 创建Httpclient对象
+	        CloseableHttpClient httpclient = HttpClients.createDefault();
+	
+	        // 创建http GET请求
+	        HttpGet httpGet = new HttpGet("http://www.baidu.com/");
+	
+	        // 构建请求配置信息
+	        RequestConfig config = RequestConfig.custom().setConnectTimeout(1000) // 创建连接的最长时间
+	                .setConnectionRequestTimeout(500) // 从连接池中获取到连接的最长时间
+	                .setSocketTimeout(10 * 1000) // 数据传输的最长时间
+	                .setStaleConnectionCheckEnabled(true) // 提交请求前测试连接是否可用
+	                .build();
+	        // 设置请求配置信息
+	        httpGet.setConfig(config);
+	
+	        CloseableHttpResponse response = null;
+	        try {
+	            // 执行请求
+	            response = httpclient.execute(httpGet);
+	            // 判断返回状态是否为200
+	            if (response.getStatusLine().getStatusCode() == 200) {
+	                String content = EntityUtils.toString(response.getEntity(), "UTF-8");
+	                System.out.println(content);
+	            }
+	        } finally {
+	            if (response != null) {
+	                response.close();
+	            }
+	            httpclient.close();
+	        }
+	
+	    }
+	
+	}
 
+### 3、httpclient整合spring mvc框架
+
+* 建立配置参数文件httpclient.properties
+
+		http.maxtotal=200
+		http.setDefaultMaxPerRoute=20
+		http.connectTimeout=1000
+		http.socketTimeout= 10000
+		http.connectionRequestTimeout=500
+		http.staleConnectionCheckEnabled=true
+	
+* 建立配置文件 applicationContext-httpClient.xml
+
+		<?xml version="1.0" encoding="UTF-8"?>
+		<beans xmlns="http://www.springframework.org/schema/beans"
+		       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+		
+		     <!--定义连接管理器-->
+		    <bean id="connectionManager"  class="org.apache.http.impl.conn.PoolingHttpClientConnectionManager">
+		        <!--最大连接数-->
+		        <property name="maxTotal" value="${http.maxtotal}"/>
+		        <!--主机并发数量-->
+		        <property name="defaultMaxPerRoute" value="${http.setDefaultMaxPerRoute}"/>
+		    </bean>
+		    <bean  id="httpClientBuilder" class="org.apache.http.impl.client.HttpClientBuilder">
+		        <property name="connectionManager" ref="connectionManager"/>
+		    </bean>
+		    <!--多实例-->
+		    <bean class="org.apache.http.impl.client.CloseableHttpClient" factory-bean="httpClientBuilder"
+		          factory-method="build" scope="prototype"></bean>
+		
+		    <bean id="requestConfigBuilder" class="org.apache.http.client.config.RequestConfig.Builder">
+		        <!--创建连接的最长时间-->
+		        <property name="connectTimeout" value="${http.connectTimeout}"/>
+		        <!--数据传输的最长时间-->
+		        <property name="socketTimeout" value="${http.socketTimeout}"/>
+		        <!--从连接池中获取到连接的最长时间-->
+		        <property name="connectionRequestTimeout" value="${http.connectionRequestTimeout}"/>
+		        <!--提交请求前测试连接是否可用-->
+		        <property name="staleConnectionCheckEnabled" value="${http.staleConnectionCheckEnabled}"  />
+		    </bean>
+		    <!--请求配置对象(单列)-->
+		    <bean class="org.apache.http.client.config.RequestConfig"
+		          factory-bean="requestConfigBuilder" factory-method="build"></bean>
+		          <!--定期关闭无效链接-->
+		    <bean class="com.ljpz.common.httpclient.IdleConnectionEvictor">
+		        <constructor-arg index="0" ref="connectionManager"/>
+		    </bean>
+		</beans>
+
+### 4、封装对应的api service
 
 
 	

@@ -5,8 +5,8 @@
     <description>techbolg record mylife</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sun, 26 Feb 2017 22:53:11 +0800</pubDate>
-    <lastBuildDate>Sun, 26 Feb 2017 22:53:11 +0800</lastBuildDate>
+    <pubDate>Mon, 27 Feb 2017 11:25:05 +0800</pubDate>
+    <lastBuildDate>Mon, 27 Feb 2017 11:25:05 +0800</lastBuildDate>
     <generator>Jekyll v3.4.0</generator>
     
       <item>
@@ -179,7 +179,7 @@
     &lt;/div&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;建立一个自动校验的类型&lt;/p&gt;
+    &lt;p&gt;需要创建一个线程thread自动校验清理无效连接&lt;/p&gt;
 
     &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  package cn.itcast.httpclient;
 	
@@ -241,7 +241,118 @@
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&quot;工具包整合httpclient&quot;&gt;工具包整合httpclient&lt;/h3&gt;
+&lt;h3 id=&quot;2httpclient建立连接时几个比较重要的参数config&quot;&gt;2、httpclient建立连接时几个比较重要的参数config&lt;/h3&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;package cn.itcast.httpclient;
+
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+
+public class RequestConfigDemo {
+
+    public static void main(String[] args) throws Exception {
+
+        // 创建Httpclient对象
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+
+        // 创建http GET请求
+        HttpGet httpGet = new HttpGet(&quot;http://www.baidu.com/&quot;);
+
+        // 构建请求配置信息
+        RequestConfig config = RequestConfig.custom().setConnectTimeout(1000) // 创建连接的最长时间
+                .setConnectionRequestTimeout(500) // 从连接池中获取到连接的最长时间
+                .setSocketTimeout(10 * 1000) // 数据传输的最长时间
+                .setStaleConnectionCheckEnabled(true) // 提交请求前测试连接是否可用
+                .build();
+        // 设置请求配置信息
+        httpGet.setConfig(config);
+
+        CloseableHttpResponse response = null;
+        try {
+            // 执行请求
+            response = httpclient.execute(httpGet);
+            // 判断返回状态是否为200
+            if (response.getStatusLine().getStatusCode() == 200) {
+                String content = EntityUtils.toString(response.getEntity(), &quot;UTF-8&quot;);
+                System.out.println(content);
+            }
+        } finally {
+            if (response != null) {
+                response.close();
+            }
+            httpclient.close();
+        }
+
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;3httpclient整合spring-mvc框架&quot;&gt;3、httpclient整合spring mvc框架&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;建立配置参数文件httpclient.properties&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  http.maxtotal=200
+  http.setDefaultMaxPerRoute=20
+  http.connectTimeout=1000
+  http.socketTimeout= 10000
+  http.connectionRequestTimeout=500
+  http.staleConnectionCheckEnabled=true
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;建立配置文件 applicationContext-httpClient.xml&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;
+  &amp;lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+         xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+         xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&amp;gt;
+	
+       &amp;lt;!--定义连接管理器--&amp;gt;
+      &amp;lt;bean id=&quot;connectionManager&quot;  class=&quot;org.apache.http.impl.conn.PoolingHttpClientConnectionManager&quot;&amp;gt;
+          &amp;lt;!--最大连接数--&amp;gt;
+          &amp;lt;property name=&quot;maxTotal&quot; value=&quot;${http.maxtotal}&quot;/&amp;gt;
+          &amp;lt;!--主机并发数量--&amp;gt;
+          &amp;lt;property name=&quot;defaultMaxPerRoute&quot; value=&quot;${http.setDefaultMaxPerRoute}&quot;/&amp;gt;
+      &amp;lt;/bean&amp;gt;
+      &amp;lt;bean  id=&quot;httpClientBuilder&quot; class=&quot;org.apache.http.impl.client.HttpClientBuilder&quot;&amp;gt;
+          &amp;lt;property name=&quot;connectionManager&quot; ref=&quot;connectionManager&quot;/&amp;gt;
+      &amp;lt;/bean&amp;gt;
+      &amp;lt;!--多实例--&amp;gt;
+      &amp;lt;bean class=&quot;org.apache.http.impl.client.CloseableHttpClient&quot; factory-bean=&quot;httpClientBuilder&quot;
+            factory-method=&quot;build&quot; scope=&quot;prototype&quot;&amp;gt;&amp;lt;/bean&amp;gt;
+	
+      &amp;lt;bean id=&quot;requestConfigBuilder&quot; class=&quot;org.apache.http.client.config.RequestConfig.Builder&quot;&amp;gt;
+          &amp;lt;!--创建连接的最长时间--&amp;gt;
+          &amp;lt;property name=&quot;connectTimeout&quot; value=&quot;${http.connectTimeout}&quot;/&amp;gt;
+          &amp;lt;!--数据传输的最长时间--&amp;gt;
+          &amp;lt;property name=&quot;socketTimeout&quot; value=&quot;${http.socketTimeout}&quot;/&amp;gt;
+          &amp;lt;!--从连接池中获取到连接的最长时间--&amp;gt;
+          &amp;lt;property name=&quot;connectionRequestTimeout&quot; value=&quot;${http.connectionRequestTimeout}&quot;/&amp;gt;
+          &amp;lt;!--提交请求前测试连接是否可用--&amp;gt;
+          &amp;lt;property name=&quot;staleConnectionCheckEnabled&quot; value=&quot;${http.staleConnectionCheckEnabled}&quot;  /&amp;gt;
+      &amp;lt;/bean&amp;gt;
+      &amp;lt;!--请求配置对象(单列)--&amp;gt;
+      &amp;lt;bean class=&quot;org.apache.http.client.config.RequestConfig&quot;
+            factory-bean=&quot;requestConfigBuilder&quot; factory-method=&quot;build&quot;&amp;gt;&amp;lt;/bean&amp;gt;
+            &amp;lt;!--定期关闭无效链接--&amp;gt;
+      &amp;lt;bean class=&quot;com.ljpz.common.httpclient.IdleConnectionEvictor&quot;&amp;gt;
+          &amp;lt;constructor-arg index=&quot;0&quot; ref=&quot;connectionManager&quot;/&amp;gt;
+      &amp;lt;/bean&amp;gt;
+  &amp;lt;/beans&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;4封装对应的api-service&quot;&gt;4、封装对应的api service&lt;/h3&gt;
 
 </description>
         <pubDate>Sun, 26 Feb 2017 00:00:00 +0800</pubDate>
