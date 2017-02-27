@@ -5,8 +5,8 @@
     <description>techbolg record mylife</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 27 Feb 2017 13:30:44 +0800</pubDate>
-    <lastBuildDate>Mon, 27 Feb 2017 13:30:44 +0800</lastBuildDate>
+    <pubDate>Mon, 27 Feb 2017 13:38:56 +0800</pubDate>
+    <lastBuildDate>Mon, 27 Feb 2017 13:38:56 +0800</lastBuildDate>
     <generator>Jekyll v3.4.0</generator>
     
       <item>
@@ -18,6 +18,15 @@
 &lt;/blockquote&gt;
 
 &lt;hr /&gt;
+&lt;h4 id=&quot;导航&quot;&gt;导航&lt;/h4&gt;
+&lt;blockquote&gt;
+  &lt;ul&gt;
+    &lt;li&gt;1、httpclient工具发送请求（get/post)*&lt;/li&gt;
+    &lt;li&gt;2、&lt;a href=&quot;#build2&quot;&gt;httpclient建立连接时几个比较重要的参数config&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;3、&lt;a href=&quot;#build3&quot;&gt;httpclient整合spring mvc框架&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;4、&lt;a href=&quot;#build4&quot;&gt;封装对应的api service&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/blockquote&gt;
 
 &lt;h3 id=&quot;1httpclient工具发送请求getpost&quot;&gt;1、httpclient工具发送请求（get/post）&lt;/h3&gt;
 
@@ -241,6 +250,7 @@
   &lt;/li&gt;
 &lt;/ul&gt;
 
+&lt;p id=&quot;build2&quot;&gt;&lt;/p&gt;
 &lt;h3 id=&quot;2httpclient建立连接时几个比较重要的参数config&quot;&gt;2、httpclient建立连接时几个比较重要的参数config&lt;/h3&gt;
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;package cn.itcast.httpclient;
 
@@ -292,6 +302,7 @@ public class RequestConfigDemo {
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
+&lt;p id=&quot;build3&quot;&gt;&lt;/p&gt;
 &lt;h3 id=&quot;3httpclient整合spring-mvc框架&quot;&gt;3、httpclient整合spring mvc框架&lt;/h3&gt;
 
 &lt;ul&gt;
@@ -352,6 +363,7 @@ public class RequestConfigDemo {
   &lt;/li&gt;
 &lt;/ul&gt;
 
+&lt;p id=&quot;build4&quot;&gt;&lt;/p&gt;
 &lt;h3 id=&quot;4封装对应的api-service&quot;&gt;4、封装对应的api service&lt;/h3&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;package com.ljpz.common.service;

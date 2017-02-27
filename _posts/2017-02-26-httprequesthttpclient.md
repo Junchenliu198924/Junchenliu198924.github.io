@@ -17,6 +17,11 @@ tags:
 
 
 ---
+#### 导航
+>* 1、httpclient工具发送请求（get/post)*
+>* 2、[httpclient建立连接时几个比较重要的参数config](#build2)
+>* 3、[httpclient整合spring mvc框架](#build3)
+>* 4、[封装对应的api service](#build4)
 
 
 ###  1、httpclient工具发送请求（get/post）
@@ -226,6 +231,7 @@ tags:
 		}
 
 
+<p id="build2"></p>
 ### 2、httpclient建立连接时几个比较重要的参数config
 	package cn.itcast.httpclient;
 	
@@ -275,6 +281,7 @@ tags:
 	
 	}
 
+<p id="build3"></p>
 ### 3、httpclient整合spring mvc框架
 
 * 建立配置参数文件httpclient.properties
@@ -326,6 +333,7 @@ tags:
 		    </bean>
 		</beans>
 
+<p id="build4"></p>
 ### 4、封装对应的api service
 	
 	package com.ljpz.common.service;
