@@ -5,12 +5,12 @@
     <description>techbolg record mylife</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 06 Mar 2017 00:47:33 +0800</pubDate>
-    <lastBuildDate>Mon, 06 Mar 2017 00:47:33 +0800</lastBuildDate>
+    <pubDate>Mon, 06 Mar 2017 08:37:29 +0800</pubDate>
+    <lastBuildDate>Mon, 06 Mar 2017 08:37:29 +0800</lastBuildDate>
     <generator>Jekyll v3.4.0</generator>
     
       <item>
-        <title>java-web项目问题小计(1)</title>
+        <title>java-web项目问题小结(1)</title>
         <description>&lt;blockquote&gt;
   &lt;ul&gt;
     &lt;li&gt;&lt;em&gt;最近自己在做一个自己的一个项目的，今天基本把框架给打好了，因为是javaweb的应用所以我采用了主流的框架 springMVC + spring + mybatis的主流框架，今天在做的过程中碰到了不少问题，这边做下今天的总结&lt;/em&gt;&lt;/li&gt;

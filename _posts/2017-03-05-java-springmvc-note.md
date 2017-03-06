@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "java-web项目问题小计(1)"
+title:      "java-web项目问题小结(1)"
 subtitle:   "java web功能实现笔记"
 date:       2017-03-05
 author:     "Supremeliu"
