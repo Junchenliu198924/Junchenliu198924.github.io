@@ -10,9 +10,9 @@
     <meta name="keyword"  content="">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>java-web跨域请求解决方案-jsonp - Supremeliu Blog</title>
+    <title>java-web项目问题小结(2) - Supremeliu Blog</title>
 
-    <link rel="canonical" href="http://localhost:4000/2017/02/23/httprequestjsonp/">
+    <link rel="canonical" href="http://localhost:4000/2017/03/06/java-springmvc-note2/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -125,12 +125,12 @@
 
     <!-- Image to hack wechat -->
 <!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
-<!-- <img src="/img/ie_sifhay7o-john-cobb.jpg" width="0" height="0"> -->
+<!-- <img src="/img/2017-03-06.jpg" width="0" height="0"> -->
 
 <!-- Post Header -->
 <style type="text/css">
     header.intro-header{
-        background-image: url('/img/ie_sifhay7o-john-cobb.jpg')
+        background-image: url('/img/2017-03-06.jpg')
     }
 </style>
 <header class="intro-header" >
@@ -140,19 +140,19 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#实用教程" title="实用教程">实用教程</a>
+                        <a class="tag" href="/tags/#spring" title="spring">spring</a>
                         
                         <a class="tag" href="/tags/#java" title="java">java</a>
                         
                         <a class="tag" href="/tags/#web" title="web">web</a>
                         
                     </div>
-                    <h1>java-web跨域请求解决方案-jsonp</h1>
+                    <h1>java-web项目问题小结(2)</h1>
                     
                     
                     <h2 class="subheading">java web功能实现笔记</h2>
                     
-                    <span class="meta">Posted by Supremeliu on February 23, 2017</span>
+                    <span class="meta">Posted by Supremeliu on March 6, 2017</span>
                 </div>
             </div>
         </div>
@@ -172,228 +172,106 @@
 
 				<blockquote>
   <ul>
-    <li><em>最近一直在学习前端的一些基本编程技巧，对于http请求资源的解决方法比较普遍的两种，一种就是今天分享的JSONP，还有另外一种就是通过服务器端httpclient工具包进行请求获取资源（明天的内容有了~）</em></li>
+    <li><em>今天在研究mybatis的数据映射文件mapper的写法，发现mybatis的映射非常的完善，也不是很难懂，因为可以自己写sql绑定自由度是非常高的，今天主要学习了下select的绑定。</em></li>
   </ul>
 </blockquote>
 
 <hr />
-
-<h3 id="1用js加载的方式来解决不能跨域请求资源">1、用js加载的方式来解决不能跨域请求资源</h3>
+<h3 id="1mybatis查询绑定内嵌对象注意要点">1、mybatis查询绑定内嵌对象注意要点</h3>
 
 <ul>
   <li>
-    <p>准备一个简单的jsp文件：</p>
+    <p>spring中mybatis的配置文件：</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> &lt;%@page language="java" contentType="text/html; charset=UTF-8"
-           pageEncoding="UTF-8"%&gt;
+    <div class="highlighter-rouge"><pre class="highlight"><code> &lt;beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+        xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd"&gt;
 	
- &lt;%
-     out.print("{\"abc\":123}");
- %&gt;  返回为json字符串：
-
- {
-     "abc": 123
- }
+     &lt;bean class="org.mybatis.spring.SqlSessionFactoryBean"&gt;
+         &lt;!-- 数据源 --&gt;
+         &lt;property name="dataSource" ref="dataSource"/&gt;
+         &lt;!-- 配置Mybatis的全局配置文件 --&gt;
+         &lt;property name="configLocation" value="classpath:mybatis/mybatis-config.xml"/&gt;
+         &lt;!-- 配置mapper.xml文件 --&gt;
+          &lt;property name="mapperLocations" value="classpath:mybatis/mapper/*.xml"/&gt;
+         &lt;!-- 别名包 --&gt;
+         &lt;property name="typeAliasesPackage" value="com.bocim.maintaince.pojo"/&gt;
+     &lt;/bean&gt;
+     &lt;!-- mapper接口的扫描器 --&gt;
+     &lt;bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"&gt;
+         &lt;property name="basePackage" value="com.bocim.maintaince.mapper"/&gt;
+     &lt;/bean&gt;
+     &lt;bean id="MUserDAO" class="com.bocim.maintaince.dao.MUserDAO"&gt;&lt;/bean&gt;
+ &lt;/beans&gt;
 </code></pre>
     </div>
   </li>
   <li>
-    <p>新建一个html文件：</p>
+    <p>创建对应的接口类后 (例如:MuserMapper)，接下来我们主要运用mapper将sql语句映射成java的对象，具体的用法请参考<a href="http://www.mybatis.org/mybatis-3/index.html">spring官方文档</a>,下面是我要映射的java pojo类。</p>
 
-    <p>testforjsonp.htm:</p>
-
-    <div class="highlighter-rouge"><pre class="highlight"><code> <span class="cp">&lt;!DOCTYPE html&gt;</span>
- <span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
- <span class="nt">&lt;head&gt;</span>
-     <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
-     <span class="nt">&lt;title&gt;</span>test<span class="nt">&lt;/title&gt;</span>
-     <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"/js/jquery-easyui-1.4.1/jquery.min.js"</span> <span class="nt">&gt;&lt;/script&gt;</span>
- <span class="nt">&lt;/head&gt;</span>
-	
-	
- <span class="nt">&lt;body&gt;</span>
- <span class="nt">&lt;script&gt;</span>
-     <span class="nx">alert</span><span class="p">(</span><span class="nx">$</span><span class="p">)</span>  <span class="p">;</span>
-     <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
-         <span class="na">type</span> <span class="p">:</span> <span class="s2">"POST"</span>  <span class="p">,</span>
-         <span class="na">dataType</span> <span class="p">:</span>  <span class="s2">"json"</span>   <span class="p">,</span>
-         <span class="na">url</span> <span class="p">:</span> <span class="s2">"http://localhost:8081/json.jsp"</span><span class="p">,</span>
-         <span class="na">success</span> <span class="p">:</span>  <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
-             <span class="nx">alert</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">abc</span> <span class="p">)</span>  <span class="p">;</span>  <span class="c1">//能够正常返回json字符串</span>
-         <span class="p">}</span>
-	
-     <span class="p">})</span>
- <span class="nt">&lt;/script&gt;</span>
- <span class="nt">&lt;/body&gt;</span>
- <span class="nt">&lt;/html&gt;</span>
+    <div class="highlighter-rouge"><pre class="highlight"><code> public class Muser {
+     @Id
+     @GeneratedValue(strategy = GenerationType.IDENTITY)
+     private  Long id  ;
+     private  String username    ;
+     private  String password  ;
+     private  String phone  ;
+     private  String email  ;
+     @JsonDeserialize(using = DateDeserializer.class)
+     private Date createTime;//创建时间
+     @JsonDeserialize(using = DateDeserializer.class)
+     private Date updateTime;//更新时间
+     private List&lt;Userprivilege&gt;   userprivileges  ;  //用户菜单权限
+     .........
 </code></pre>
     </div>
   </li>
   <li>
-    <p>浏览 本地地址 http://localhost:8081/testforjsonp.htm 资源都能被访问到（同域当然能够访问）</p>
+    <p>在对应的mapper文件中绑定对应sql语句。</p>
 
-    <p><img src="https://cl.ly/01303s050J2S/Image%202017-02-24%20at%2001.04.36.png" alt="" />
-  <img src="https://cl.ly/3F3k1d3A3r0l/Image%202017-02-24%20at%2001.12.56.png" alt="" /></p>
+    <div class="highlighter-rouge"><pre class="highlight"><code>  <span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+  <span class="cp">&lt;!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+          "http://mybatis.org/dtd/mybatis-3-mapper.dtd"&gt;</span>
+  <span class="nt">&lt;mapper</span> <span class="na">namespace=</span><span class="s">"com.bocim.maintaince.mapper.MuserMapper"</span><span class="nt">&gt;</span>
+      <span class="c">&lt;!--可以引用的sql变量模板--&gt;</span>
+      <span class="c">&lt;!--&lt;sql id="tableName"&gt;maintaince_user&lt;/sql&gt;--&gt;</span>
+      <span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">"pojoResultMap2"</span> <span class="na">type=</span><span class="s">"Muser"</span>  <span class="na">autoMapping=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">property=</span><span class="s">"id"</span><span class="nt">/&gt;</span>
+          <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">"username"</span> <span class="na">property=</span><span class="s">"username"</span><span class="nt">/&gt;</span>
+          <span class="nt">&lt;collection</span> <span class="na">property=</span><span class="s">"userprivileges"</span>   <span class="na">ofType=</span><span class="s">"Userprivilege"</span> <span class="nt">&gt;</span>
+              <span class="nt">&lt;id</span>  <span class="na">property=</span><span class="s">"moduleId"</span> <span class="na">column=</span><span class="s">"moduleid"</span><span class="nt">/&gt;</span>
+              <span class="nt">&lt;result</span>  <span class="na">property=</span><span class="s">"moduleName"</span>  <span class="na">column=</span><span class="s">"modulename"</span> <span class="nt">/&gt;</span>
+              <span class="nt">&lt;result</span> <span class="na">property=</span><span class="s">"moduleUser"</span> <span class="na">column=</span><span class="s">"moduleuser"</span> <span class="nt">/&gt;</span>
+          <span class="nt">&lt;/collection&gt;</span>
+      <span class="nt">&lt;/resultMap&gt;</span>
+
+  <span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">"queryUserPrivilegeByUsername"</span> <span class="na">resultMap=</span><span class="s">"pojoResultMap2"</span><span class="nt">&gt;</span>
+   select   a.id as id ,
+      a.username as username ,
+      a.password   ,
+      a.phone    ,
+      a.email,
+      a.created,
+      a.updated,
+      b.module_id as   moduleid ,
+      b.user_name as    moduleuser ,
+      c.module_name as modulename
+      from maintaince_user  a  LEFT JOIN   maintaince_privilege b ON a.username=b.user_name LEFT JOIN maintaince_module c on b.module_id=c.id
+      where  a.username=#{username}
+  <span class="nt">&lt;/select&gt;</span>
+  <span class="nt">&lt;/mapper&gt;</span>
+</code></pre>
+    </div>
   </li>
   <li>
-    <p>把testforjsonp.htm中加载js的地址改下，放到另外的一个服务容器上面</p>
+    <p>小结</p>
 
-    <p>修改js用http地址来获取js：</p>
-
-    <div class="highlighter-rouge"><pre class="highlight"><code>   &lt;script type="text/javascript" src="http://localhost:8081/js/jquery-easyui-1.4.1/jquery.min.js" &gt;&lt;/script&gt;
-</code></pre>
-    </div>
-
-    <p>结果JavaScript的js资源能够正常加载，但是htm因为跨域原因浏览器报错，如下：</p>
-
-    <p><img src="https://cl.ly/3B0y331d3x3s/Image%202017-02-24%20at%2001.23.25.png" alt="" /></p>
-  </li>
-  <li>
-    <p>把对应的ajax请求放在script请求资源的标签中</p>
-
-    <div class="highlighter-rouge"><pre class="highlight"><code>  <span class="cp">&lt;!DOCTYPE html&gt;</span>
-  <span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;head&gt;</span>
-      <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;title&gt;</span>test<span class="nt">&lt;/title&gt;</span>
-      <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"http://localhost:8081/js/jquery-easyui-1.4.1/jquery.min.js"</span> <span class="nt">&gt;&lt;/script&gt;</span>
-  <span class="nt">&lt;/head&gt;</span>
-	
-	
-  <span class="nt">&lt;body&gt;</span>
-  <span class="nt">&lt;script&gt;</span>
-      <span class="nx">alert</span><span class="p">(</span><span class="nx">$</span><span class="p">)</span>  <span class="p">;</span>
-  <span class="nt">&lt;/script&gt;</span>
-  <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"http://localhost:8081/json.jsp"</span><span class="nt">&gt;&lt;/script&gt;</span>
-  <span class="nt">&lt;/body&gt;</span>
-  <span class="nt">&lt;/html&gt;</span>
-</code></pre>
-    </div>
-
-    <p>结果js加载资源能够正常的解析但由于json.jsp不是js的文本所欲报错</p>
-
-    <p><img src="https://cl.ly/3o2k313s0S44/Image%202017-02-24%20at%2001.32.42.png" alt="" /></p>
-  </li>
-  <li>
-    <p>把对应的json.jsp包装成js的结构</p>
-
-    <div class="highlighter-rouge"><pre class="highlight"><code>  &lt;%@page language="java" contentType="text/html; charset=UTF-8"
-            pageEncoding="UTF-8"%&gt;
-	
-  &lt;%
-      out.print("fun({\"abc\":123})");
-  %&gt;
-</code></pre>
-    </div>
-
-    <p>在对应的testforjsonp.htm中定义对应的function方法fun:</p>
-
-    <div class="highlighter-rouge"><pre class="highlight"><code>  <span class="cp">&lt;!DOCTYPE html&gt;</span>
-  <span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;head&gt;</span>
-      <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;title&gt;</span>test<span class="nt">&lt;/title&gt;</span>
-      <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"http://localhost:8081/js/jquery-easyui-1.4.1/jquery.min.js"</span> <span class="nt">&gt;&lt;/script&gt;</span>
-  <span class="nt">&lt;/head&gt;</span>
-	
-	
-  <span class="nt">&lt;body&gt;</span>
-  <span class="nt">&lt;script&gt;</span>
-      <span class="nx">alert</span><span class="p">(</span><span class="nx">$</span><span class="p">)</span>  
-      <span class="kd">function</span> <span class="nx">fun</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-          <span class="nx">alert</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">abc</span><span class="p">)</span>
-      <span class="p">}</span>
-  <span class="nt">&lt;/script&gt;</span>
-  <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"http://localhost:8081/json.jsp"</span><span class="nt">&gt;&lt;/script&gt;</span>
-  <span class="nt">&lt;/body&gt;</span>
-  <span class="nt">&lt;/html&gt;</span>
-</code></pre>
-    </div>
-
-    <p>能够正常访问这个就是jsonp的原理！
-  <img src="https://cl.ly/1z1Z0u3b3X36/Image%202017-02-24%20at%2001.41.21.png" alt="" /></p>
-  </li>
-  <li>
-    <p>用call来传递回调函数，实现跨域访问</p>
-
-    <p>将json.jsp改写：</p>
-
-    <div class="highlighter-rouge"><pre class="highlight"><code>  &lt;%@page language="java" contentType="text/html; charset=UTF-8"
-            pageEncoding="UTF-8"%&gt;
-	
-  &lt;%
-      String callback= request.getParameter("callback");
-      if (callback ==null|| "".equals(callback)){
-          out.print("{\"abc\":123}");
-      }
-      else {
-          out.print(callback+"({\"abc\":123})");
-      }
-  %&gt;
-</code></pre>
-    </div>
-
-    <p>testforjsonp.htm修改请求加入callback的参数：</p>
-
-    <div class="highlighter-rouge"><pre class="highlight"><code>      <span class="cp">&lt;!DOCTYPE html&gt;</span>
-  <span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;head&gt;</span>
-      <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;title&gt;</span>test<span class="nt">&lt;/title&gt;</span>
-      <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"http://localhost:8081/js/jquery-easyui-1.4.1/jquery.min.js"</span> <span class="nt">&gt;&lt;/script&gt;</span>
-  <span class="nt">&lt;/head&gt;</span>
-	
-	
-  <span class="nt">&lt;body&gt;</span>
-  <span class="nt">&lt;script&gt;</span>
-      <span class="nx">alert</span><span class="p">(</span><span class="nx">$</span><span class="p">)</span>
-      <span class="kd">function</span> <span class="nx">fun</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-          <span class="nx">alert</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">abc</span><span class="p">)</span>
-      <span class="p">}</span>
-  <span class="nt">&lt;/script&gt;</span>
-  <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"http://localhost:8081/json.jsp?callback=fun"</span><span class="nt">&gt;&lt;/script&gt;</span>
-  <span class="nt">&lt;/body&gt;</span>
-  <span class="nt">&lt;/html&gt;</span>
-</code></pre>
-    </div>
-
-    <p><img src="https://cl.ly/1z1Z0u3b3X36/Image%202017-02-24%20at%2001.41.21.png" alt="" /></p>
-  </li>
-  <li>
-    <p>在实际应用中使用JSONP</p>
-
-    <p>很简单只需在用ajax提供请求把参数dataType改为jsonp即可</p>
-
-    <p>testforjsonp.htm:</p>
-
-    <div class="highlighter-rouge"><pre class="highlight"><code>  <span class="cp">&lt;!DOCTYPE html&gt;</span>
-  <span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;head&gt;</span>
-      <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;title&gt;</span>test<span class="nt">&lt;/title&gt;</span>
-      <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"http://localhost:8081/js/jquery-easyui-1.4.1/jquery.min.js"</span> <span class="nt">&gt;&lt;/script&gt;</span>
-  <span class="nt">&lt;/head&gt;</span>
-	
-	
-  <span class="nt">&lt;body&gt;</span>
-  <span class="nt">&lt;script&gt;</span>
-      <span class="nx">alert</span><span class="p">(</span><span class="nx">$</span><span class="p">)</span>  <span class="p">;</span><span class="c1">//前面的jquery加载正常</span>
-      <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
-          <span class="na">type</span> <span class="p">:</span> <span class="s2">"POST"</span>  <span class="p">,</span>
-          <span class="na">dataType</span> <span class="p">:</span>  <span class="s2">"jsonp"</span>   <span class="p">,</span>
-          <span class="na">url</span> <span class="p">:</span> <span class="s2">"http://localhost:8081/json.jsp"</span><span class="p">,</span>
-          <span class="na">success</span> <span class="p">:</span>  <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
-              <span class="nx">alert</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">abc</span><span class="p">)</span>  <span class="p">;</span>  <span class="c1">//能够正常返回json字符串</span>
-          <span class="p">}</span>
-	
-      <span class="p">})</span>
-  <span class="nt">&lt;/script&gt;</span>
-  <span class="nt">&lt;/body&gt;</span>
-  <span class="nt">&lt;/html&gt;</span>
-</code></pre>
-    </div>
-
-    <p><img src="https://cl.ly/1m313K0W3s3w/Image%202017-02-24%20at%2002.00.49.png" alt="" /></p>
+    <p>在用mybatis 绑定内嵌java查询对象，要搞清楚单挑sql中字段和java对象属性之间的n 对 n 的关系，并且关联对象往往就是主键或者是具有唯一性的字段，在mapper映射关系中要用<id>来配置。这一部分的编写还是要多多参考官方文档的写法，文档的例子都很实用，务必好好阅读收藏！对于有一定sql基础的人员来说很方便，</id></p>
   </li>
 </ul>
 
@@ -406,13 +284,13 @@
                 </style>
                 <div class="ds-share"
                     style="text-align: right"
-                    data-thread-key="/2017/02/23/httprequestjsonp"
-                    data-title="java-web跨域请求解决方案-jsonp"
-                    data-url="http://localhost:4000/2017/02/23/httprequestjsonp/"
-                    data-images="http://localhost:4000/img/ie_sifhay7o-john-cobb.jpg"
+                    data-thread-key="/2017/03/06/java-springmvc-note2"
+                    data-title="java-web项目问题小结(2)"
+                    data-url="http://localhost:4000/2017/03/06/java-springmvc-note2/"
+                    data-images="http://localhost:4000/img/2017-03-06.jpg"
                     data-content="
   
-    最近一直在学习前端的一些基本编程技巧，对于http请求资源的解决方法比较普遍的两种，一种就是今天分享的JSONP，还有另外一种就是通过服务... | Supremeliu Blog " >
+    今天在研究mybatis的数据映射文件mapper的写法，发现mybatis的映射非常的完善，也不是很难懂，因为可以自己写sql绑定自由度... | Supremeliu Blog " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
                         <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -432,13 +310,9 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2017/02/21/imageupload/" data-toggle="tooltip" data-placement="top" title="用KindEditor套件实现文件上传功能">&larr; Previous Post</a>
+                        <a href="/2017/03/05/java-springmvc-note/" data-toggle="tooltip" data-placement="top" title="java-web项目问题小结(1)">&larr; Previous Post</a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/2017/02/26/httprequesthttpclient/" data-toggle="tooltip" data-placement="top" title="java-web跨域请求解决方案-httpclient">Next Post &rarr;</a>
-                    </li>
                     
                 </ul>
 
@@ -449,9 +323,9 @@
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                        data-thread-key="/2017/02/23/httprequestjsonp"
-                        data-title="java-web跨域请求解决方案-jsonp"
-                        data-url="http://localhost:4000/2017/02/23/httprequestjsonp/" >
+                        data-thread-key="/2017/03/06/java-springmvc-note2"
+                        data-title="java-web项目问题小结(2)"
+                        data-url="http://localhost:4000/2017/03/06/java-springmvc-note2/" >
                     </div>
                 </div>
                 <!-- 多说评论框 end -->

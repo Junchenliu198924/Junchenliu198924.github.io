@@ -9,6 +9,7 @@ tags:
     - spring
     - java
     - web
+    - js
 ---
 
 
@@ -19,10 +20,7 @@ tags:
 ---
 #### 导航
 >* 1、[关于spring-mvc 配置文件资源加载问题解决]()
-
 >* 2、[jsp服务器端el和客户端js变量传递方法](#build2)
->* 3、[httpclient整合spring mvc框架](#build3)
->* 4、[封装对应的api service](#build4)
 
 
 ###  1、关于spring-mvc 配置文件资源加载问题解决

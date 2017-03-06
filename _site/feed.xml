@@ -5,9 +5,130 @@
     <description>techbolg record mylife</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 06 Mar 2017 08:41:21 +0800</pubDate>
-    <lastBuildDate>Mon, 06 Mar 2017 08:41:21 +0800</lastBuildDate>
+    <pubDate>Tue, 07 Mar 2017 00:10:02 +0800</pubDate>
+    <lastBuildDate>Tue, 07 Mar 2017 00:10:02 +0800</lastBuildDate>
     <generator>Jekyll v3.4.0</generator>
+    
+      <item>
+        <title>java-web项目问题小结(2)</title>
+        <description>&lt;blockquote&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;em&gt;今天在研究mybatis的数据映射文件mapper的写法，发现mybatis的映射非常的完善，也不是很难懂，因为可以自己写sql绑定自由度是非常高的，今天主要学习了下select的绑定。&lt;/em&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+&lt;h3 id=&quot;1mybatis查询绑定内嵌对象注意要点&quot;&gt;1、mybatis查询绑定内嵌对象注意要点&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;spring中mybatis的配置文件：&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &amp;lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+        xmlns:context=&quot;http://www.springframework.org/schema/context&quot; xmlns:p=&quot;http://www.springframework.org/schema/p&quot;
+        xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot; xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot;
+        xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd&quot;&amp;gt;
+	
+     &amp;lt;bean class=&quot;org.mybatis.spring.SqlSessionFactoryBean&quot;&amp;gt;
+         &amp;lt;!-- 数据源 --&amp;gt;
+         &amp;lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;/&amp;gt;
+         &amp;lt;!-- 配置Mybatis的全局配置文件 --&amp;gt;
+         &amp;lt;property name=&quot;configLocation&quot; value=&quot;classpath:mybatis/mybatis-config.xml&quot;/&amp;gt;
+         &amp;lt;!-- 配置mapper.xml文件 --&amp;gt;
+          &amp;lt;property name=&quot;mapperLocations&quot; value=&quot;classpath:mybatis/mapper/*.xml&quot;/&amp;gt;
+         &amp;lt;!-- 别名包 --&amp;gt;
+         &amp;lt;property name=&quot;typeAliasesPackage&quot; value=&quot;com.bocim.maintaince.pojo&quot;/&amp;gt;
+     &amp;lt;/bean&amp;gt;
+     &amp;lt;!-- mapper接口的扫描器 --&amp;gt;
+     &amp;lt;bean class=&quot;org.mybatis.spring.mapper.MapperScannerConfigurer&quot;&amp;gt;
+         &amp;lt;property name=&quot;basePackage&quot; value=&quot;com.bocim.maintaince.mapper&quot;/&amp;gt;
+     &amp;lt;/bean&amp;gt;
+     &amp;lt;bean id=&quot;MUserDAO&quot; class=&quot;com.bocim.maintaince.dao.MUserDAO&quot;&amp;gt;&amp;lt;/bean&amp;gt;
+ &amp;lt;/beans&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;创建对应的接口类后 (例如:MuserMapper)，接下来我们主要运用mapper将sql语句映射成java的对象，具体的用法请参考&lt;a href=&quot;http://www.mybatis.org/mybatis-3/index.html&quot;&gt;spring官方文档&lt;/a&gt;,下面是我要映射的java pojo类。&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; public class Muser {
+     @Id
+     @GeneratedValue(strategy = GenerationType.IDENTITY)
+     private  Long id  ;
+     private  String username    ;
+     private  String password  ;
+     private  String phone  ;
+     private  String email  ;
+     @JsonDeserialize(using = DateDeserializer.class)
+     private Date createTime;//创建时间
+     @JsonDeserialize(using = DateDeserializer.class)
+     private Date updateTime;//更新时间
+     private List&amp;lt;Userprivilege&amp;gt;   userprivileges  ;  //用户菜单权限
+     .........
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;在对应的mapper文件中绑定对应sql语句。&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;cp&quot;&gt;&amp;lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
+          &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;mapper&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;namespace=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.bocim.maintaince.mapper.MuserMapper&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;c&quot;&gt;&amp;lt;!--可以引用的sql变量模板--&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;c&quot;&gt;&amp;lt;!--&amp;lt;sql id=&quot;tableName&quot;&amp;gt;maintaince_user&amp;lt;/sql&amp;gt;--&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;resultMap&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;pojoResultMap2&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Muser&quot;&lt;/span&gt;  &lt;span class=&quot;na&quot;&gt;autoMapping=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;true&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+          &lt;span class=&quot;nt&quot;&gt;&amp;lt;id&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;id&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+          &lt;span class=&quot;nt&quot;&gt;&amp;lt;result&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;username&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;username&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+          &lt;span class=&quot;nt&quot;&gt;&amp;lt;collection&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;userprivileges&quot;&lt;/span&gt;   &lt;span class=&quot;na&quot;&gt;ofType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Userprivilege&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+              &lt;span class=&quot;nt&quot;&gt;&amp;lt;id&lt;/span&gt;  &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;moduleId&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;moduleid&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+              &lt;span class=&quot;nt&quot;&gt;&amp;lt;result&lt;/span&gt;  &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;moduleName&quot;&lt;/span&gt;  &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;modulename&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+              &lt;span class=&quot;nt&quot;&gt;&amp;lt;result&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;moduleUser&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;moduleuser&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+          &lt;span class=&quot;nt&quot;&gt;&amp;lt;/collection&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/resultMap&amp;gt;&lt;/span&gt;
+
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;select&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;queryUserPrivilegeByUsername&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resultMap=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;pojoResultMap2&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+   select   a.id as id ,
+      a.username as username ,
+      a.password   ,
+      a.phone    ,
+      a.email,
+      a.created,
+      a.updated,
+      b.module_id as   moduleid ,
+      b.user_name as    moduleuser ,
+      c.module_name as modulename
+      from maintaince_user  a  LEFT JOIN   maintaince_privilege b ON a.username=b.user_name LEFT JOIN maintaince_module c on b.module_id=c.id
+      where  a.username=#{username}
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/select&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/mapper&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;小结&lt;/p&gt;
+
+    &lt;p&gt;在用mybatis 绑定内嵌java查询对象，要搞清楚单挑sql中字段和java对象属性之间的n 对 n 的关系，并且关联对象往往就是主键或者是具有唯一性的字段，在mapper映射关系中要用&lt;id&gt;来配置。这一部分的编写还是要多多参考官方文档的写法，文档的例子都很实用，务必好好阅读收藏！对于有一定sql基础的人员来说很方便，&lt;/id&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+        <pubDate>Mon, 06 Mar 2017 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2017/03/06/java-springmvc-note2/</link>
+        <guid isPermaLink="true">http://localhost:4000/2017/03/06/java-springmvc-note2/</guid>
+        
+        <category>spring</category>
+        
+        <category>java</category>
+        
+        <category>web</category>
+        
+        
+      </item>
     
       <item>
         <title>java-web项目问题小结(1)</title>
@@ -22,14 +143,7 @@
 &lt;blockquote&gt;
   &lt;ul&gt;
     &lt;li&gt;1、&lt;a href=&quot;&quot;&gt;关于spring-mvc 配置文件资源加载问题解决&lt;/a&gt;&lt;/li&gt;
-  &lt;/ul&gt;
-&lt;/blockquote&gt;
-
-&lt;blockquote&gt;
-  &lt;ul&gt;
     &lt;li&gt;2、&lt;a href=&quot;#build2&quot;&gt;jsp服务器端el和客户端js变量传递方法&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;3、&lt;a href=&quot;#build3&quot;&gt;httpclient整合spring mvc框架&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;4、&lt;a href=&quot;#build4&quot;&gt;封装对应的api service&lt;/a&gt;&lt;/li&gt;
   &lt;/ul&gt;
 &lt;/blockquote&gt;
 
@@ -128,6 +242,8 @@
         <category>java</category>
         
         <category>web</category>
+        
+        <category>js</category>
         
         
       </item>
