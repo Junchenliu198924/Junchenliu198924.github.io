@@ -10,9 +10,9 @@
     <meta name="keyword"  content="">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>java-web项目问题小结(1) - Supremeliu Blog</title>
+    <title>java-web项目问题小结(3) - Supremeliu Blog</title>
 
-    <link rel="canonical" href="http://localhost:4000/2017/03/05/java-springmvc-note/">
+    <link rel="canonical" href="http://localhost:4000/2017/03/07/java-springmvc-note3/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -125,12 +125,12 @@
 
     <!-- Image to hack wechat -->
 <!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
-<!-- <img src="/img/ie_sifhay7o-john-cobb.jpg" width="0" height="0"> -->
+<!-- <img src="/img/2017-03-06.jpg" width="0" height="0"> -->
 
 <!-- Post Header -->
 <style type="text/css">
     header.intro-header{
-        background-image: url('/img/ie_sifhay7o-john-cobb.jpg')
+        background-image: url('/img/2017-03-06.jpg')
     }
 </style>
 <header class="intro-header" >
@@ -149,12 +149,12 @@
                         <a class="tag" href="/tags/#js" title="js">js</a>
                         
                     </div>
-                    <h1>java-web项目问题小结(1)</h1>
+                    <h1>java-web项目问题小结(3)</h1>
                     
                     
                     <h2 class="subheading">java web功能实现笔记</h2>
                     
-                    <span class="meta">Posted by Supremeliu on March 5, 2017</span>
+                    <span class="meta">Posted by Supremeliu on March 7, 2017</span>
                 </div>
             </div>
         </div>
@@ -174,103 +174,192 @@
 
 				<blockquote>
   <ul>
-    <li><em>最近自己在做一个自己的一个项目的，今天基本把框架给打好了，因为是javaweb的应用所以我采用了主流的框架 springMVC + spring + mybatis的主流框架，今天在做的过程中碰到了不少问题，这边做下今天的总结</em></li>
+    <li><em>今天还是继续折腾项目的前段基础页面，总算把登录和功能模块完成，并且确定以后写功能模块页面的展示架构。以下是我对于今天碰到问题的解决总结。</em></li>
   </ul>
 </blockquote>
 
 <hr />
-<h4 id="导航">导航</h4>
+
+<h3 id="目录">目录</h3>
+
 <blockquote>
   <ul>
-    <li>1、<a href="">关于spring-mvc 配置文件资源加载问题解决</a></li>
-    <li>2、<a href="#build2">jsp服务器端el和客户端js变量传递方法</a></li>
+    <li>1、<a href="">用jquery局部加载登录页面</a></li>
+    <li>2、<a href="#build2">用jquery的cookie插件来实现“记住密码” 功能</a></li>
+    <li>3、<a href="#build3">quartz的定时任务的学习</a></li>
   </ul>
 </blockquote>
 
-<h3 id="1关于spring-mvc-配置文件资源加载问题解决">1、关于spring-mvc 配置文件资源加载问题解决</h3>
+<h3 id="1用jquery局部加载登录页面">1、用jquery局部加载登录页面</h3>
 
 <ul>
-  <li>
-    <p>在项目中想要运用对应的@value注解来获取env.properties中的值：</p>
-
-    <div class="highlighter-rouge"><pre class="highlight"><code> @Controller
- @RequestMapping("page")
- public class PageController {
-     @Value("${itmaintaince_SSO_URL}")
-     public   String  itmaintaintaince_SSO_UTL;
-     @RequestMapping(value = "{pagename}" , method = RequestMethod.GET)
-     public String topage(@PathVariable("pagename")String pagename, HttpServletResponse response) throws IOException {
-         String loginurl= itmaintaintaince_SSO_UTL+"/public/login.html" ;
-         if (pagename.equals("login")){
-             //转到对应的登录页面
-             response.sendRedirect(loginurl);
-             return null   ;
-         }
-	
-         return  pagename  ;
-     }
- }
-</code></pre>
-    </div>
-  </li>
-  <li>
-    <p>调试的过程发现没有取到itmaintaince_SSO_URL的值，但是在spring的启动文件里面已经配置了：</p>
-
-    <div class="highlighter-rouge"><pre class="highlight"><code>  &lt;bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"&gt;
-         &lt;!-- 允许JVM参数覆盖 --&gt;
-         &lt;!-- java -Djdbc.url=123 -jar xxx.jar --&gt;
-         &lt;property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" /&gt;
-         &lt;!-- 忽略没有找到的资源文件 --&gt;
-         &lt;property name="ignoreResourceNotFound" value="true" /&gt;
-         &lt;!-- 配置资源文件 --&gt;
-         &lt;property name="locations"&gt;
-             &lt;list&gt;
-                 &lt;value&gt;classpath:log4j.properties&lt;/value&gt;
-                 &lt;value&gt;classpath:jdbc.properties&lt;/value&gt;
-                 &lt;value&gt;classpath:env.properties&lt;/value&gt;
-             &lt;/list&gt;
-         &lt;/property&gt;
-     &lt;/bean&gt;		
-</code></pre>
-    </div>
-  </li>
-  <li>
-    <p>查资料后，解决方案为在spring-mvc的启动配置文件里面再加载相同的配置文件即可调用该资源，不能加载的原因也和spring的父子容器有关，具体结论如下：</p>
-  </li>
+  <li>主要思路就是运用jquery的局部onload的这个方法函数来实现对于主页面的特定div的重新加载，具体实现实现js如下：
+     jsp：
+     //出发了
+     js：
+     function loadConten(url) {
+     //选取主要页面div对象重新加载新的页面地址
+         $(“div.page-content”).load(url);
+     }</li>
 </ul>
-
-<blockquote>
-  <ul>
-    <li>1、spring容器初始化（所有的bean）之后，在当前的所在的容器中获取值，然后注入。</li>
-    <li>2、spring容器与spring-mvc的为父子容器，子容器能够访问父容器的资源（bean）示例：controller可以注入service</li>
-    <li>3、父容器不能访问子容器的资源（bean）</li>
-  </ul>
-</blockquote>
 
 <p id="build2"></p>
 
-<h3 id="2记一次jsp服务器端el和客户端js变量传递方法">2、记一次jsp服务器端el和客户端js变量传递方法</h3>
+<h3 id="2用jquery的cookie插件来实现记住密码-功能">2、用jquery的cookie插件来实现“记住密码” 功能</h3>
 
 <ul>
   <li>
-    <p>对应的js文件</p>
+    <p>在登录加载如下js内容：</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code>  &lt;script&gt;
-      $(function () {
-          var aaa=new Array();
-          //这边循环的把对应el表达式中的值加入到客户端js申明的变量数组中去
-          &lt;c:forEach items="${privelige}" var="mm"&gt;
-              aaa.push("${mm}");
-          &lt;/c:forEach&gt;;
-	
-  //            var bb = aaa
-              MT.checkShow(aaa) ;
-      })
-  &lt;/script&gt;
+    <div class="highlighter-rouge"><pre class="highlight"><code>  jQuery(document).ready(function() {
+      Login.init();
+      //初始化页时验证是否记住密码
+      if ($.cookie("remember") == "true") {
+         /* $("input[name='remember']").attr("checked", true);
+          $("input[name='username']").val($.cookie("userName"));
+          $("input[name='password']").val($.cookie("passWord"));*/
+          $("#remember").attr("checked", true);
+          $("#realname").val($.cookie("userName"));
+          $("#realpassword").val($.cookie("passWord"));
+      }
+  });
+</code></pre>
+    </div>
+  </li>
+  <li>
+    <p>用jquery-cookie-js插件，在正常登陆后保存密码到cookie中去，实现的方法js如下：</p>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code>  function saveUserInfo() {
+  //$("").is(':checked')  选中需要缓冲后
+      if ($("#remember").is(':checked') == true) {
+          var userName = $("#realname").val();
+          var passWord = $("#realpassword").val();
+          $.cookie("remember", "true", { expires: 7 }); // 存储一个带7天期限的 cookie
+          $.cookie("userName", userName, { expires: 7 }); // 存储一个带7天期限的 cookie
+          $.cookie("passWord", passWord, { expires: 7 }); // 存储一个带7天期限的 cookie
+      }
+      else {
+          $.cookie("rmbUser", "false", { expires: -1 });
+          $.cookie("userName", '', { expires: -1 });
+          $.cookie("passWord", '', { expires: -1 });
+      }
+  }
 </code></pre>
     </div>
   </li>
 </ul>
+
+<h3 id="3quartz的定时任务学习">3、quartz的定时任务学习</h3>
+
+<ul>
+  <li>
+    <p>根据官方文档 如果你的项目也是用maven ，按照下面配置即可。</p>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code> &lt;dependency&gt;
+        &lt;groupId&gt;org.quartz-scheduler&lt;/groupId&gt;
+        &lt;artifactId&gt;quartz&lt;/artifactId&gt;
+        &lt;version&gt;2.2.1&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.quartz-scheduler&lt;/groupId&gt;
+        &lt;artifactId&gt;quartz-jobs&lt;/artifactId&gt;
+        &lt;version&gt;2.2.1&lt;/version&gt;
+</code></pre>
+    </div>
+  </li>
+  <li>
+    <p>记一次简单的quartz任务，主要实例化过程如下：</p>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code>public class SimpleExample {
+	
+  public void run() throws Exception {
+    Logger log = LoggerFactory.getLogger(SimpleExample.class);
+	
+    log.info("------- Initializing ----------------------");
+	
+    // First we must get a reference to a scheduler
+    SchedulerFactory sf = new StdSchedulerFactory();
+    Scheduler sched = sf.getScheduler();
+	
+    log.info("------- Initialization Complete -----------");
+	
+    // computer a time that is on the next round minute
+    Date runTime = evenMinuteDate(new Date());
+	
+    log.info("------- Scheduling Job  -------------------");
+	
+    // define the job and tie it to our HelloJob class
+    JobDetail job = newJob(HelloJob.class).withIdentity("job1", "group1").build();
+	
+    // Trigger the job to run on the next round minute
+    Trigger trigger = newTrigger().withIdentity("trigger1", "group1").startAt(runTime).build();
+	
+    // Tell quartz to schedule the job using our trigger
+    sched.scheduleJob(job, trigger);
+    log.info(job.getKey() + " will run at: " + runTime);
+	
+    // Start up the scheduler (nothing can actually run until the
+    // scheduler has been started)
+    sched.start();
+	
+    log.info("------- Started Scheduler -----------------");
+	
+    // wait long enough so that the scheduler as an opportunity to
+    // run the job!
+    log.info("------- Waiting 65 seconds... -------------");
+    try {
+      // wait 65 seconds to show job
+      Thread.sleep(65L * 1000L);
+      // executing...
+    } catch (Exception e) {
+      //
+    }
+	
+    // shut down the scheduler
+    log.info("------- Shutting Down ---------------------");
+    sched.shutdown(true);
+    log.info("------- Shutdown Complete -----------------");
+  }
+	
+  public static void main(String[] args) throws Exception {
+	
+    SimpleExample example = new SimpleExample();
+    example.run();   }
+</code></pre>
+    </div>
+
+    <p>}</p>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code>public HelloJob() {
+}
+
+/**
+ * &lt;p&gt;
+ * Called by the &lt;code&gt;{@link org.quartz.Scheduler}&lt;/code&gt; when a
+ * &lt;code&gt;{@link org.quartz.Trigger}&lt;/code&gt; fires that is associated with
+ * the &lt;code&gt;Job&lt;/code&gt;.
+ * &lt;/p&gt;
+ * 
+ * @throws JobExecutionException
+ *             if there is an exception while executing the job.
+ */
+public void execute(JobExecutionContext context)
+    throws JobExecutionException {
+
+    // Say Hello to the World and display the date/time
+    _log.info("Hello World! - " + new Date());
+}
+</code></pre>
+    </div>
+  </li>
+</ul>
+
+<p id="build3"></p>
+<h3 id="小结">小结</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>js的jquery非常的好用，在我的项目中模块都需要和这个监控挂钩
+</code></pre>
+</div>
 
 
 
@@ -281,13 +370,14 @@
                 </style>
                 <div class="ds-share"
                     style="text-align: right"
-                    data-thread-key="/2017/03/05/java-springmvc-note"
-                    data-title="java-web项目问题小结(1)"
-                    data-url="http://localhost:4000/2017/03/05/java-springmvc-note/"
-                    data-images="http://localhost:4000/img/ie_sifhay7o-john-cobb.jpg"
+                    data-thread-key="/2017/03/07/java-springmvc-note3"
+                    data-title="java-web项目问题小结(3)"
+                    data-url="http://localhost:4000/2017/03/07/java-springmvc-note3/"
+                    data-images="http://localhost:4000/img/2017-03-06.jpg"
                     data-content="
   
-    最近自己在做一个自己的一个项目的，今天基本把框架给打好了，因为是javaweb的应用所以我采用了主流的框架 springMVC + spr... | Supremeliu Blog " >
+    今天还是继续折腾项目的前段基础页面，总算把登录和功能模块完成，并且确定以后写功能模块页面的展示架构。以下是我对于今天碰到问题的解决总结。
+... | Supremeliu Blog " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
                         <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -307,13 +397,9 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2017/02/26/httprequesthttpclient/" data-toggle="tooltip" data-placement="top" title="java-web跨域请求解决方案-httpclient">&larr; Previous Post</a>
+                        <a href="/2017/03/06/java-springmvc-note2/" data-toggle="tooltip" data-placement="top" title="java-web项目问题小结(2)">&larr; Previous Post</a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/2017/03/06/java-springmvc-note2/" data-toggle="tooltip" data-placement="top" title="java-web项目问题小结(2)">Next Post &rarr;</a>
-                    </li>
                     
                 </ul>
 
@@ -324,9 +410,9 @@
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                        data-thread-key="/2017/03/05/java-springmvc-note"
-                        data-title="java-web项目问题小结(1)"
-                        data-url="http://localhost:4000/2017/03/05/java-springmvc-note/" >
+                        data-thread-key="/2017/03/07/java-springmvc-note3"
+                        data-title="java-web项目问题小结(3)"
+                        data-url="http://localhost:4000/2017/03/07/java-springmvc-note3/" >
                     </div>
                 </div>
                 <!-- 多说评论框 end -->

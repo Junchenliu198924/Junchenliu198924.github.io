@@ -5,9 +5,216 @@
     <description>techbolg record mylife</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 07 Mar 2017 00:18:47 +0800</pubDate>
-    <lastBuildDate>Tue, 07 Mar 2017 00:18:47 +0800</lastBuildDate>
+    <pubDate>Wed, 08 Mar 2017 01:03:26 +0800</pubDate>
+    <lastBuildDate>Wed, 08 Mar 2017 01:03:26 +0800</lastBuildDate>
     <generator>Jekyll v3.4.0</generator>
+    
+      <item>
+        <title>java-web项目问题小结(3)</title>
+        <description>&lt;blockquote&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;em&gt;今天还是继续折腾项目的前段基础页面，总算把登录和功能模块完成，并且确定以后写功能模块页面的展示架构。以下是我对于今天碰到问题的解决总结。&lt;/em&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;目录&quot;&gt;目录&lt;/h3&gt;
+
+&lt;blockquote&gt;
+  &lt;ul&gt;
+    &lt;li&gt;1、&lt;a href=&quot;&quot;&gt;用jquery局部加载登录页面&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;2、&lt;a href=&quot;#build2&quot;&gt;用jquery的cookie插件来实现“记住密码” 功能&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;3、&lt;a href=&quot;#build3&quot;&gt;quartz的定时任务的学习&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;1用jquery局部加载登录页面&quot;&gt;1、用jquery局部加载登录页面&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;主要思路就是运用jquery的局部onload的这个方法函数来实现对于主页面的特定div的重新加载，具体实现实现js如下：
+     jsp：
+     //出发了
+     js：
+     function loadConten(url) {
+     //选取主要页面div对象重新加载新的页面地址
+         $(“div.page-content”).load(url);
+     }&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p id=&quot;build2&quot;&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;2用jquery的cookie插件来实现记住密码-功能&quot;&gt;2、用jquery的cookie插件来实现“记住密码” 功能&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;在登录加载如下js内容：&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  jQuery(document).ready(function() {
+      Login.init();
+      //初始化页时验证是否记住密码
+      if ($.cookie(&quot;remember&quot;) == &quot;true&quot;) {
+         /* $(&quot;input[name='remember']&quot;).attr(&quot;checked&quot;, true);
+          $(&quot;input[name='username']&quot;).val($.cookie(&quot;userName&quot;));
+          $(&quot;input[name='password']&quot;).val($.cookie(&quot;passWord&quot;));*/
+          $(&quot;#remember&quot;).attr(&quot;checked&quot;, true);
+          $(&quot;#realname&quot;).val($.cookie(&quot;userName&quot;));
+          $(&quot;#realpassword&quot;).val($.cookie(&quot;passWord&quot;));
+      }
+  });
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;用jquery-cookie-js插件，在正常登陆后保存密码到cookie中去，实现的方法js如下：&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  function saveUserInfo() {
+  //$(&quot;&quot;).is(':checked')  选中需要缓冲后
+      if ($(&quot;#remember&quot;).is(':checked') == true) {
+          var userName = $(&quot;#realname&quot;).val();
+          var passWord = $(&quot;#realpassword&quot;).val();
+          $.cookie(&quot;remember&quot;, &quot;true&quot;, { expires: 7 }); // 存储一个带7天期限的 cookie
+          $.cookie(&quot;userName&quot;, userName, { expires: 7 }); // 存储一个带7天期限的 cookie
+          $.cookie(&quot;passWord&quot;, passWord, { expires: 7 }); // 存储一个带7天期限的 cookie
+      }
+      else {
+          $.cookie(&quot;rmbUser&quot;, &quot;false&quot;, { expires: -1 });
+          $.cookie(&quot;userName&quot;, '', { expires: -1 });
+          $.cookie(&quot;passWord&quot;, '', { expires: -1 });
+      }
+  }
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;3quartz的定时任务学习&quot;&gt;3、quartz的定时任务学习&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;根据官方文档 如果你的项目也是用maven ，按照下面配置即可。&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &amp;lt;dependency&amp;gt;
+        &amp;lt;groupId&amp;gt;org.quartz-scheduler&amp;lt;/groupId&amp;gt;
+        &amp;lt;artifactId&amp;gt;quartz&amp;lt;/artifactId&amp;gt;
+        &amp;lt;version&amp;gt;2.2.1&amp;lt;/version&amp;gt;
+    &amp;lt;/dependency&amp;gt;
+    &amp;lt;dependency&amp;gt;
+        &amp;lt;groupId&amp;gt;org.quartz-scheduler&amp;lt;/groupId&amp;gt;
+        &amp;lt;artifactId&amp;gt;quartz-jobs&amp;lt;/artifactId&amp;gt;
+        &amp;lt;version&amp;gt;2.2.1&amp;lt;/version&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;记一次简单的quartz任务，主要实例化过程如下：&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;public class SimpleExample {
+	
+  public void run() throws Exception {
+    Logger log = LoggerFactory.getLogger(SimpleExample.class);
+	
+    log.info(&quot;------- Initializing ----------------------&quot;);
+	
+    // First we must get a reference to a scheduler
+    SchedulerFactory sf = new StdSchedulerFactory();
+    Scheduler sched = sf.getScheduler();
+	
+    log.info(&quot;------- Initialization Complete -----------&quot;);
+	
+    // computer a time that is on the next round minute
+    Date runTime = evenMinuteDate(new Date());
+	
+    log.info(&quot;------- Scheduling Job  -------------------&quot;);
+	
+    // define the job and tie it to our HelloJob class
+    JobDetail job = newJob(HelloJob.class).withIdentity(&quot;job1&quot;, &quot;group1&quot;).build();
+	
+    // Trigger the job to run on the next round minute
+    Trigger trigger = newTrigger().withIdentity(&quot;trigger1&quot;, &quot;group1&quot;).startAt(runTime).build();
+	
+    // Tell quartz to schedule the job using our trigger
+    sched.scheduleJob(job, trigger);
+    log.info(job.getKey() + &quot; will run at: &quot; + runTime);
+	
+    // Start up the scheduler (nothing can actually run until the
+    // scheduler has been started)
+    sched.start();
+	
+    log.info(&quot;------- Started Scheduler -----------------&quot;);
+	
+    // wait long enough so that the scheduler as an opportunity to
+    // run the job!
+    log.info(&quot;------- Waiting 65 seconds... -------------&quot;);
+    try {
+      // wait 65 seconds to show job
+      Thread.sleep(65L * 1000L);
+      // executing...
+    } catch (Exception e) {
+      //
+    }
+	
+    // shut down the scheduler
+    log.info(&quot;------- Shutting Down ---------------------&quot;);
+    sched.shutdown(true);
+    log.info(&quot;------- Shutdown Complete -----------------&quot;);
+  }
+	
+  public static void main(String[] args) throws Exception {
+	
+    SimpleExample example = new SimpleExample();
+    example.run();   }
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;p&gt;}&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;public HelloJob() {
+}
+
+/**
+ * &amp;lt;p&amp;gt;
+ * Called by the &amp;lt;code&amp;gt;{@link org.quartz.Scheduler}&amp;lt;/code&amp;gt; when a
+ * &amp;lt;code&amp;gt;{@link org.quartz.Trigger}&amp;lt;/code&amp;gt; fires that is associated with
+ * the &amp;lt;code&amp;gt;Job&amp;lt;/code&amp;gt;.
+ * &amp;lt;/p&amp;gt;
+ * 
+ * @throws JobExecutionException
+ *             if there is an exception while executing the job.
+ */
+public void execute(JobExecutionContext context)
+    throws JobExecutionException {
+
+    // Say Hello to the World and display the date/time
+    _log.info(&quot;Hello World! - &quot; + new Date());
+}
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p id=&quot;build3&quot;&gt;&lt;/p&gt;
+&lt;h3 id=&quot;小结&quot;&gt;小结&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;js的jquery非常的好用，在我的项目中模块都需要和这个监控挂钩
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+</description>
+        <pubDate>Tue, 07 Mar 2017 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2017/03/07/java-springmvc-note3/</link>
+        <guid isPermaLink="true">http://localhost:4000/2017/03/07/java-springmvc-note3/</guid>
+        
+        <category>spring</category>
+        
+        <category>java</category>
+        
+        <category>web</category>
+        
+        <category>js</category>
+        
+        
+      </item>
     
       <item>
         <title>java-web项目问题小结(2)</title>
@@ -1677,118 +1884,6 @@ public class ApiService implements BeanFactoryAware{
         <pubDate>Fri, 17 Feb 2017 00:00:00 +0800</pubDate>
         <link>http://localhost:4000/2017/02/17/jekyll-addMusic/</link>
         <guid isPermaLink="true">http://localhost:4000/2017/02/17/jekyll-addMusic/</guid>
-        
-        <category>实用教程</category>
-        
-        <category>Jekyll</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>用Jekyll来搭建个人博客以及所涉及的工具介绍</title>
-        <description>&lt;blockquote&gt;
-  &lt;ul&gt;
-    &lt;li&gt;&lt;em&gt;今天这是我2017年的第一篇技术博客，以后争取一天一更记录自己一天下来的收获或者分享一些自己有用的内容，今天借用了github和jekyll搭建了个人blog，我也是刚刚开始学习前端，接下来是我今天的分享&lt;/em&gt;&lt;/li&gt;
-  &lt;/ul&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&quot;导航&quot;&gt;导航&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&quot;#build1&quot;&gt;下载安装jekyll构建自己的demoblog&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;#build2&quot;&gt;问题小结&lt;/a&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-&lt;h2 id=&quot;下载安装jekyll构建自己的demoblog&quot;&gt;下载安装jekyll构建自己的demoblog&lt;/h2&gt;
-
-&lt;h3 id=&quot;构建本机环境&quot;&gt;构建本机环境&lt;/h3&gt;
-
-&lt;p&gt;我本机环境是2014年 retina mac pro,根据官方网站的指引因为之前已经安装过了ruby的环境，是以前的安装的所以步骤这边就暂时省略，以后如果再安装再把具体的步骤补上。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://jekyll.com.cn/&quot;&gt;jekyll中文主页&lt;/a&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;进入“快速指南”按照步骤在本机的命令界面下操作如下命令:&lt;/p&gt;
-
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  $gem install jekyll
-  $jekyll new myblog
-  $cd myblog
-  ~/myblog $ jekyll serve
-  =&amp;gt; Now browse to http://localhost:4000
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;构建生产的模板网站主要用到以下两个命令（更多命令请查看官方文档）&lt;/p&gt;
-
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  $jekyll build
-  =&amp;gt; 当前文件夹中的内容将会生成到 ./site 文件夹中。
-  $jekyll serve
-  =&amp;gt; 一个开发服务器将会运行在 http://localhost:4000/
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;因为官方文档的网页不够美观我也参考的对应几个jekyll网站最后决定fork&lt;a href=&quot;https://github.com/Huxpro&quot;&gt;黄玄项目jekyll&lt;/a&gt; 的模板，通过git下载到本地。&lt;/p&gt;
-
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  --clone到本地文件夹
-  $git clone git@github.com:Huxpro/huxblog-boilerplate.git
-  --几个重要文件|文件夹说明
-  _site文件夹存放 jekyll build生成的静态源码文件
-  _post文件夹存放你的blog的内容（markdown）
-	
-  _config.xml文件用来配置个人信息参数
-  具体的配置信息我在这里不再赘述请查看模板项目说明即可
-	
-  *这边需要注意的是 
-  baseurl: &quot;/supremeliuBlog&quot;如果配置的话在本地运行的时候需要输入
-  jekyll serve --baseurl '' 
-  请确定在 --baseurl 的选项之后存在空串，这样的话你就可以在 localhost:4000 看到你
-  的站点（站点根地址不存在 /project-name）。
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;在&lt;a href=&quot;https://github.com/&quot;&gt;github&lt;/a&gt; 上新建个人主页的repository&lt;/p&gt;
-
-    &lt;p&gt;&lt;img src=&quot;https://cl.ly/200y0L1M2m2Z/[1b3064c16c95bec58954dab68391f609]_Image%25202017-02-17%2520at%252000.05.00.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-    &lt;p&gt;按照github 个人网站主要的按照规则命名  junchenliu198924.github.io&lt;/p&gt;
-
-    &lt;p&gt;&lt;img src=&quot;https://cl.ly/2K2f3M1V1c2l/Image%202017-02-17%20at%2000.11.17.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;git clone 本项目的到本地，把刚才修改好的模板文件拷贝到github的主页工程中。&lt;/p&gt;
-
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;   git clone https://github.com/Junchenliu198924/Junchenliu198924.github.io.git
-   cp -r *  ../../Junchenliu198924.github.io/
-   git add .
-   git commit &quot;2017-02-16&quot;
-   --把本地代码提交到github
-   git push origin master
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;输入网址验证是否部署成功。&lt;/p&gt;
-
-    &lt;p&gt;&lt;img src=&quot;https://cl.ly/2F2n351B3M2x/Image%202017-02-17%20at%2000.32.35.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p id=&quot;build2&quot;&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;问题小结&quot;&gt;问题小结&lt;/h2&gt;
-
-&lt;p&gt;今天安装总体来说还是蛮顺利的，jekyll文档中文支持也很好，基本按照操作文档执行就可以完成基础安装任务，文档后续的更新我使用markdown 工具&lt;a href=&quot;http://macdown.uranusjr.com/&quot;&gt;MacDown的软件&lt;/a&gt;，因为markdown截图需要链接所以我选择了Cloudapp的这款工具，但是遇到截图比较大保存起来就会缓慢影响体验（微博的那个工具貌似用不了），如果你有什么好截图上传共享地址的软件可以在评论留言告知笔者，非常感谢！&lt;/p&gt;
-
-</description>
-        <pubDate>Thu, 16 Feb 2017 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2017/02/16/jekyll-install/</link>
-        <guid isPermaLink="true">http://localhost:4000/2017/02/16/jekyll-install/</guid>
         
         <category>实用教程</category>
         
