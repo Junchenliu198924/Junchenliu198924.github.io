@@ -30,8 +30,7 @@ tags:
 ###  1、用jquery局部加载登录页面
 
 *  主要思路就是运用jquery的局部onload的这个方法函数来实现对于主页面的特定div的重新加载，具体实现实现js如下：
-		jsp：
-		//出发了
+		
 		js：
 		function loadConten(url) {
 		//选取主要页面div对象重新加载新的页面地址
@@ -67,8 +66,8 @@ tags:
 * 用jquery-cookie-js插件，在正常登陆后保存密码到cookie中去，实现的方法js如下：
 	
 		function saveUserInfo() {
-		//$("").is(':checked')  选中需要缓冲后
-		    if ($("#remember").is(':checked') == true) {
+		//$("").is(':checked')    选中的对象 如果type为checkbox，就可以用  jquery的is(':checked')	
+			    if ($("#remember").is(':checked') == true) {
 		        var userName = $("#realname").val();
 		        var passWord = $("#realpassword").val();
 		        $.cookie("remember", "true", { expires: 7 }); // 存储一个带7天期限的 cookie
@@ -81,6 +80,10 @@ tags:
 		        $.cookie("passWord", '', { expires: -1 });
 		    }
 		}
+
+
+
+<p id="build3"></p>
 
 ### 3、quartz的定时任务学习
 
@@ -185,7 +188,6 @@ tags:
 
 
 
-<p id="build3"></p>
 ### 小结
 
 	js的jquery非常的好用，在我的项目中模块都需要和这个监控挂钩
