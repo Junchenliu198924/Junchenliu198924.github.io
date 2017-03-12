@@ -5,8 +5,8 @@
     <description>techbolg record mylife</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sun, 12 Mar 2017 23:23:07 +0800</pubDate>
-    <lastBuildDate>Sun, 12 Mar 2017 23:23:07 +0800</lastBuildDate>
+    <pubDate>Sun, 12 Mar 2017 23:26:23 +0800</pubDate>
+    <lastBuildDate>Sun, 12 Mar 2017 23:26:23 +0800</lastBuildDate>
     <generator>Jekyll v3.4.0</generator>
     
       <item>
@@ -68,9 +68,6 @@
 &lt;ul&gt;
   &lt;li&gt;
     &lt;p&gt;抽象类，今天我在项目中运用到了感觉主要益处在于能够让代码更加的简洁。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;在spring -mvc 的架构中， 父类元素的初始化，个人认为可以放在service层根据业务来统一初始化，这样可以大大的简化冗余代码。&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
     &lt;p&gt;我今天开发的模块的运维任务的模块，其中涉及到 db任务以及服务器任务 ，我抽象一个运维任务的（抽象父类） ，   分别让  db运维任务  和  服务器运维任务  来继承， 并且打算在service层统一对父类进行初始化。 这样非常清晰，这只是一个小小的实践，但是可以看出这种复用的思想对于写好代码是非常有帮助的。&lt;/p&gt;
