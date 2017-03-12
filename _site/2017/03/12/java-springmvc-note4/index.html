@@ -10,9 +10,9 @@
     <meta name="keyword"  content="">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>Supremeliu Blog</title>
+    <title>java-web项目问题小结(4) - Supremeliu Blog</title>
 
-    <link rel="canonical" href="http://localhost:4000/page2/">
+    <link rel="canonical" href="http://localhost:4000/2017/03/12/java-springmvc-note4/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -123,251 +123,244 @@
 </script>
 
 
-    <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/img/home_page.jpg')">
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/2017-03-06.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/2017-03-06.jpg')
+    }
+</style>
+<header class="intro-header" >
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
-                <div class="site-heading">
-                    <h1>Supremeliu Blog</h1>
-                    <!--<hr class="small">-->
-                    <span class="subheading">mytechBlog</span>
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#spring" title="spring">spring</a>
+                        
+                        <a class="tag" href="/tags/#java" title="java">java</a>
+                        
+                        <a class="tag" href="/tags/#web" title="web">web</a>
+                        
+                        <a class="tag" href="/tags/#js" title="js">js</a>
+                        
+                    </div>
+                    <h1>java-web项目问题小结(4)</h1>
+                    
+                    
+                    <h2 class="subheading">java web功能实现笔记</h2>
+                    
+                    <span class="meta">Posted by Supremeliu on March 12, 2017</span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Main Content -->
-<div class="container">
-	<div class="row">
-        
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
 
-<!-- USE SIDEBAR -->
     <!-- Post Container -->
-    		<div class="
-                col-lg-8 col-lg-offset-1
-                col-md-8 col-md-offset-1
-                col-sm-12
-                col-xs-12
-                post-container
-            ">
-    			
-<div class="post-preview">
-    <a href="/2017/02/17/jekyll-addMusic/">
-        <h2 class="post-title">
-            Jekyll在博客页面中添加网易云音乐播放
-        </h2>
-        
-        <h3 class="post-subtitle">
-            在博客中添加音乐播放以及今天踩到的一些前端的坑~
-        </h3>
-        
-        <div class="post-content-preview">
-            
-  
-    正好这几天公司上午没有什么事情，完善一下自己刚刚发布的blog，以后自己还会持续对我的网站进行改动。
-  
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
 
+				<blockquote>
+  <ul>
+    <li><em>今天开始实现对应的系统模块功能，还是碰到了不少的困难，有一些问题还是需要点耐心才能发现，好在今天的问题都已经解决，接下来会加快模块功能的开发速度</em></li>
+  </ul>
+</blockquote>
 
-导航
-在博客页面中添加网易云音乐播放
+<hr />
 
-今日问题小结
+<h3 id="目录">目录</h3>
 
+<blockquote>
+  <ul>
+    <li>1、<a href="">mybastis使用oracle和mysql之间的区别</a></li>
+    <li>2、<a href="#build2">本地虚拟机oracle连接缓慢问题的解决</a></li>
+    <li>3、<a href="#build3">抽象类在项目中运用实践</a></li>
+  </ul>
+</blockquote>
 
-在博客页面中添加网易云音乐播放
+<h3 id="1mybastis使用oracle和mysql之间的区别">1、mybastis使用oracle和mysql之间的区别</h3>
 
-网易云音乐是是我自己的平时听歌用你的软件，无论是移动端还是网页端，界面设计感我觉得是比较不错的今天偶然发现了一个生成外部链接的地方，
+<ul>
+  <li>因为项目需要使用对应的数据库oracle来开发，所以要将原先的mysql数据库的东西迁移到oracle，因为东西也不多，主要是mapper的映射sql语句的修改。</li>
+  <li>
+    <p>迁移下来，发现了几个坑， 整理如下：</p>
 
+    <p>1）mysql 支持多路的执行select/dml(在url的后面添加参数allowMultiQueries=true) <strong>但是oracle不支持</strong> 在一个标签内执行多条语句。
+  2）mysql  mapper sql语句后面用  “;” 但是 oracle不需要“;” 如果写了“;”  执行就会报错</p>
+  </li>
+</ul>
 
+<p id="build2"></p>
 
-想着以后回看的时候还能听听当时听的...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Supremeliu on February 17, 2017
-    </p>
-</div>
-<hr>
+<h3 id="2本地虚拟机oracle连接缓慢问题的解决">2、本地虚拟机oracle连接缓慢问题的解决</h3>
 
-<div class="post-preview">
-    <a href="/2017/02/16/jekyll-install/">
-        <h2 class="post-title">
-            用Jekyll来搭建个人博客以及所涉及的工具介绍
-        </h2>
-        
-        <h3 class="post-subtitle">
-            搭建过程、实用工具汇总
-        </h3>
-        
-        <div class="post-content-preview">
-            
-  
-    今天这是我2017年的第一篇技术博客，以后争取一天一更记录自己一天下来的收获或者分享一些自己有用的内容，今天借用了github和jekyll搭建了个人blog，我也是刚刚开始学习前端，接下来是我今天的分享
-  
+<ul>
+  <li>
+    <p>本地用vmware在自己的本地电脑搭建了一个oracle单点的环境， 起初java环境用oracle thin客户端连接的时候，每次大概需要一分钟才能建立正常的连接</p>
+  </li>
+  <li>
+    <p>网上找到了解决方案 把对应  vmware虚拟机的网络resolve.conf  清理下 （把里面dbs解析的内容清空一下即可），这样thin客户端就能够正常访问本地oracle数据库了。</p>
 
+    <div class="highlighter-rouge"><pre class="highlight"><code>  enmoedu1*PROD1 ~ $ cat /etc/resolv.conf
+  ; generated by /sbin/dhclient-script
+  #search lan
+  #nameserver 192.168.199.1
+  enmoedu1*PROD1 ~ $
+</code></pre>
+    </div>
+  </li>
+</ul>
 
-导航
-下载安装jekyll构建自己的demoblog
+<p id="build3"></p>
 
-问题小结
-
-
-下载安装jekyll构建自己的demoblog
-
-构建本机环境
-
-我本机环境是2014年 r...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Supremeliu on February 16, 2017
-    </p>
-</div>
-<hr>
-
-
-<!-- Pager -->
-
-<ul class="pager">
-    
-    <li class="previous">
-        <a href="/">&larr; Newer Posts</a>
-    </li>
-    
-    
+<h3 id="3抽象类在项目的运用实践">3、抽象类在项目的运用实践</h3>
+<ul>
+  <li>
+    <p>抽象类，今天我在项目中运用到了感觉主要益处在于能够让代码更加的简洁。</p>
+  </li>
+  <li>
+    <p>在spring -mvc 的架构中， 父类元素的初始化，个人认为可以放在service层根据业务来统一初始化，这样可以大大的简化冗余代码。</p>
+  </li>
+  <li>
+    <p>我今天开发的模块的运维任务的模块，其中涉及到 db任务以及服务器任务 ，我抽象一个运维任务的（抽象父类） ，   分别让  db运维任务  和  服务器运维任务  来继承， 并且打算在service层统一对父类进行初始化。 这样非常清晰，这只是一个小小的实践，但是可以看出这种复用的思想对于写好代码是非常有帮助的。</p>
+  </li>
 </ul>
 
 
-    		</div>
+
+                <hr>
+
+                
+                <!-- 多说 Share start -->
+                </style>
+                <div class="ds-share"
+                    style="text-align: right"
+                    data-thread-key="/2017/03/12/java-springmvc-note4"
+                    data-title="java-web项目问题小结(4)"
+                    data-url="http://localhost:4000/2017/03/12/java-springmvc-note4/"
+                    data-images="http://localhost:4000/img/2017-03-06.jpg"
+                    data-content="
+  
+    今天开始实现对应的系统模块功能，还是碰到了不少的困难，有一些问题还是需要点耐心才能发现，好在今天的问题都已经解决，接下来会加快模块功能的开... | Supremeliu Blog " >
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- 多说 Share end-->
+                
+
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/03/07/java-springmvc-note3/" data-toggle="tooltip" data-placement="top" title="java-web项目问题小结(3)">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                </ul>
+
+
+                
+
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                        data-thread-key="/2017/03/12/java-springmvc-note4"
+                        data-title="java-web项目问题小结(4)"
+                        data-url="http://localhost:4000/2017/03/12/java-springmvc-note4/" >
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
+
+                
+
+            </div>
+
     <!-- Sidebar Container -->
             <div class="
-                col-lg-3 col-lg-offset-0
-                col-md-3 col-md-offset-0
-                col-sm-12
-                col-xs-12
-                sidebar-container
-            ">
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+
+                <!--网易云音乐变量为page.music-id  变量为播放歌曲的序列号-->
+
+                
                 <!-- Featured Tags -->
                 
                 <section>
                     <hr class="hidden-sm hidden-xs">
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
-                        
+        				
                             
-                                <a href="/tags/#实用教程" title="实用教程" rel="6">
+                				<a href="/tags/#实用教程" title="实用教程" rel="6">
                                     实用教程
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#Jekyll" title="Jekyll" rel="2">
+                				<a href="/tags/#Jekyll" title="Jekyll" rel="2">
                                     Jekyll
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#篮球" title="篮球" rel="2">
+                				<a href="/tags/#篮球" title="篮球" rel="2">
                                     篮球
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#java" title="java" rel="8">
+                				<a href="/tags/#java" title="java" rel="8">
                                     java
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#web" title="web" rel="6">
+                				<a href="/tags/#web" title="web" rel="6">
                                     web
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#spring" title="spring" rel="4">
+                				<a href="/tags/#spring" title="spring" rel="4">
                                     spring
                                 </a>
                             
-                        
+        				
                             
-                                <a href="/tags/#js" title="js" rel="3">
+                				<a href="/tags/#js" title="js" rel="3">
                                     js
                                 </a>
                             
-                        
-                    </div>
+        				
+        			</div>
                 </section>
                 
 
-                <!-- Short About -->
-                <section class="visible-md visible-lg">
-                    <hr><h5><a href="/about/">ABOUT ME</a></h5>
-                    <div class="short-about">
-                        
-                            <img src="/img/avatar-supremeliu.jpg" />
-                        
-                        
-                            <p>让科技是自己的生活变得更加简单和幸福</p>
-                        
-                        <!-- SNS Link -->
-                        <ul class="list-inline">
-                            
-                            
-                            <li>
-                                <a href="https://twitter.com/supremeliu">
-                                    <span class="fa-stack fa-lg">
-                                        <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
-                                    </span>
-                                </a>
-                            </li>
-                            
-                            
-                            <li>
-                                <a target="_blank" href="https://www.zhihu.com/people/supremeliu">
-                                    <span class="fa-stack fa-lg">
-                                        <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa  fa-stack-1x fa-inverse">知</i>
-                                    </span>
-                                </a>
-                            </li>
-                            
-                            
-                            <li>
-                                <a target="_blank" href="http://weibo.com/supremeliu">
-                                    <span class="fa-stack fa-lg">
-                                        <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
-                                    </span>
-                                </a>
-                            </li>
-                            
-                            
-                            <li>
-                                <a target="_blank" href="https://www.facebook.com/supremeliu">
-                                    <span class="fa-stack fa-lg">
-                                        <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
-                                    </span>
-                                </a>
-                            </li>
-                            
-                            
-                            <li>
-                                <a target="_blank" href="https://github.com/Junchenliu198924">
-                                    <span class="fa-stack fa-lg">
-                                        <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                    </span>
-                                </a>
-                            </li>
-                            
-                        </ul>
-                    </div>
-                </section>
                 <!-- Friends Blog -->
                 
                 <hr>
@@ -386,10 +379,70 @@
                     
                 </ul>
                 
-    		</div>
-        
-	</div>
-</div>
+            </div>
+        </div>
+    </div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'Supremeliu';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user };
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
 
 
     <!-- Footer -->
