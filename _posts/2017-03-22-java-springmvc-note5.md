@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "表格展示控件datatable空间使用说明"
+title:      "表格展示控件datatable使用小结"
 subtitle:   "java-web项目问题小结(5)"
 date:       2017-03-22
 author:     "Supremeliu"
