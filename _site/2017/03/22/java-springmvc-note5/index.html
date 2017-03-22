@@ -10,9 +10,9 @@
     <meta name="keyword"  content="">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>用KindEditor套件实现文件上传功能 - Supremeliu Blog</title>
+    <title>表格展示控件datatable空间使用说明 - Supremeliu Blog</title>
 
-    <link rel="canonical" href="http://localhost:4000/2017/02/21/imageupload/">
+    <link rel="canonical" href="http://localhost:4000/2017/03/22/java-springmvc-note5/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -125,12 +125,12 @@
 
     <!-- Image to hack wechat -->
 <!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
-<!-- <img src="/img/ie_sifhay7o-john-cobb.jpg" width="0" height="0"> -->
+<!-- <img src="/img/2017-03-06.jpg" width="0" height="0"> -->
 
 <!-- Post Header -->
 <style type="text/css">
     header.intro-header{
-        background-image: url('/img/ie_sifhay7o-john-cobb.jpg')
+        background-image: url('/img/2017-03-06.jpg')
     }
 </style>
 <header class="intro-header" >
@@ -140,17 +140,21 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#实用教程" title="实用教程">实用教程</a>
+                        <a class="tag" href="/tags/#spring" title="spring">spring</a>
                         
                         <a class="tag" href="/tags/#java" title="java">java</a>
                         
+                        <a class="tag" href="/tags/#web" title="web">web</a>
+                        
+                        <a class="tag" href="/tags/#js" title="js">js</a>
+                        
                     </div>
-                    <h1>用KindEditor套件实现文件上传功能</h1>
+                    <h1>表格展示控件datatable空间使用说明</h1>
                     
                     
-                    <h2 class="subheading">java web功能实现笔记</h2>
+                    <h2 class="subheading">java-web项目问题小结(5)</h2>
                     
-                    <span class="meta">Posted by Supremeliu on February 21, 2017</span>
+                    <span class="meta">Posted by Supremeliu on March 22, 2017</span>
                 </div>
             </div>
         </div>
@@ -170,314 +174,207 @@
 
 				<blockquote>
   <ul>
-    <li><em>本文记录使用KindEditor的web组件实现界面的头像文件上传服务器中，项目基本架构为 spring-mvc  +   spring  +   mybatis加上maven作为项目管理</em></li>
+    <li><em>好久没有更新了 ，自己这10天也没有闲着因为看到市面上面的表格的控件基本用的都是easyui 的，那个界面个人不大喜欢的，自己项目用的ui模板里面使用了datatable这个jquery控件，觉得功能也很强大所以就拿来使用，非常感谢原作者。</em></li>
   </ul>
 </blockquote>
 
 <hr />
 
+<h3 id="目录">目录</h3>
+
+<blockquote>
+  <ul>
+    <li>1、<a href="#build1">datatable项目环境准备</a></li>
+    <li>2、<a href="#build2">整合插件到项目中去</a></li>
+    <li>3、<a href="#build3">datatable插件运用小结</a></li>
+  </ul>
+</blockquote>
+
+<h3 id="1datatable项目环境准备">1、datatable项目环境准备</h3>
+
 <ul>
   <li>
-    <h3 id="在项目工程中导入对应依赖上传工具包">在项目工程中导入对应依赖上传工具包</h3>
-    <blockquote>
-      <p>我这边使用的<a href="http://maven.aliyun.com/nexus/#welcome">阿里的maven远程中央库</a></p>
-    </blockquote>
+    <p>这个插件功能非常齐全，对于我这种小项目完全能够满足我的需求，<a href="https://datatables.net/">DataTables官方地址</a> ,在官方的文档中当然先看Example中，然后再去找对应参数说明 这点很重要！</p>
+  </li>
+  <li>
+    <p>用到的插件可以官方下载：</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code>  &lt;!--上传组件依赖--&gt;
-  &lt;dependency&gt;
-      &lt;groupId&gt;commons-fileupload&lt;/groupId&gt;
-      &lt;artifactId&gt;commons-fileupload&lt;/artifactId&gt;
-      &lt;version&gt;1.3.1&lt;/version&gt;
-  &lt;/dependency&gt;  
+    <div class="highlighter-rouge"><pre class="highlight"><code>  &lt;link rel="stylesheet" type="text/css" href="/DataTables/datatables.css"&gt;
+ 
+  &lt;script type="text/javascript" charset="utf8" src="/DataTables/datatables.js"&gt;&lt;/script&gt;
 </code></pre>
     </div>
   </li>
   <li>
-    <h3 id="在spring配置文件中注入对应的文件上传解析器">在spring配置文件中注入对应的文件上传解析器</h3>
+    <p>因为这次项目为后台cms系统 文档和例子大部分只要server-side服务器端配置即可！</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code>  &lt;!--文件上传解析器--&gt;
-  &lt;bean id="multipartResolver"
-  class="org.springframework.web.multipart.commons.CommonsMultipartResolver"&gt;
-              &lt;!--最大上传文件大小为5MB--&gt;
-              &lt;property name="maxUploadSize" value="5242880"/&gt;
-  &lt;/bean&gt;
-</code></pre>
-    </div>
+    <p><img src="http://i1.piimg.com/567571/c5e8871120ecafce.png" alt="" /></p>
   </li>
   <li>
-    <h3 id="创建bean-class-picuploadresult">创建bean Class PicUploadResult</h3>
+    <p>在example中找到服务器端的最基础处理表格的写法。</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code>  public class PicUploadResult {
-      private Integer error;
-      private String url;
-      private String width;
-      private String height;
-      public Integer getError() {
-          return error;
-      }
-      public void setError(Integer error) {
-          this.error = error;
-      }
-      public String getUrl() {
-          return url;
-      }
-      public void setUrl(String url) {
-          this.url = url;
-      }
-      public String getWidth() {
-          return width;
-      }
-      public void setWidth(String width) {
-          this.width = width;
-      }
-      public String getHeight() {
-          return height;
-      }
-      public void setHeight(String height) {
-          this.height = height;
-      }
-  }
-</code></pre>
-    </div>
+    <p><img src="http://i1.piimg.com/567571/186ab79a4903b417.png" alt="" /></p>
   </li>
   <li>
-    <h3 id="创建资源文件--imag_urlproperties">创建资源文件  imag_url.properties</h3>
+    <p>下面是表格的展示效果。</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code>  REPOSITORY_PATH=/Users/liujunchen/Developer/JavaProject/liujipuzi/ljpz-upload
-  IMAGE_BASE_URL=http://localhost:8080
-  LJPZ_WEB_URL=http://localhost:8082
-</code></pre>
-    </div>
+    <p><img src="http://i1.piimg.com/567571/a59175f9cc3a56cc.png" alt="" /></p>
   </li>
-  <li>
-    <h3 id="创建controller-class--picuploadcontroller">创建controller Class  PicUploadController</h3>
-    <div class="highlighter-rouge"><pre class="highlight"><code>  package com.ljpz.web.controller;
-	
-  import com.fasterxml.jackson.databind.ObjectMapper;
-  import com.ljpz.common.bean.PicUploadResult;
-  import com.ljpz.web.service.PropertieService;
-  import org.apache.commons.lang3.RandomUtils;
-  import org.apache.commons.lang3.StringUtils;
-  import org.joda.time.DateTime;
-  import org.slf4j.Logger;
-  import org.slf4j.LoggerFactory;
-  import org.springframework.beans.factory.annotation.Autowired;
-  import org.springframework.http.MediaType;
-  import org.springframework.stereotype.Controller;
-  import org.springframework.web.bind.annotation.RequestMapping;
-  import org.springframework.web.bind.annotation.RequestMethod;
-  import org.springframework.web.bind.annotation.RequestParam;
-  import org.springframework.web.bind.annotation.ResponseBody;
-  import org.springframework.web.multipart.MultipartFile;
-  import javax.imageio.ImageIO;
-  import javax.servlet.http.HttpServletResponse;
-  import java.awt.image.BufferedImage;
-  import java.io.File;
-  import java.io.IOException;
-  import java.util.Date;
-	
-  /**
-   * 图片上传
-   */
-  @Controller
-  @RequestMapping("pic")
-  public class PicUploadController {
-      @Autowired
-      private PropertieService propertieService  ;
-	
-      private static final Logger LOGGER = LoggerFactory.getLogger(PicUploadController.class);
-	
-      private static final ObjectMapper mapper = new ObjectMapper();
-	
-      // 允许上传的格式
-      private static final String[] IMAGE_TYPE = new String[] { ".bmp", ".jpg", ".jpeg", ".gif", ".png",".JPG" };
-	
-      /**
-       * 制定相应的类型
-       * @param uploadFile
-       * @param response
-       * @return
-       * @throws Exception
-       */
-      @RequestMapping(value = "/upload", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-      @ResponseBody
-      public String  upload (@RequestParam("uploadFile") MultipartFile uploadFile , HttpServletResponse response) throws Exception {
-	
-          // 校验图片格式
-          boolean isLegal = false;
-          for (String type : IMAGE_TYPE) {
-              if (StringUtils.endsWithIgnoreCase(uploadFile.getOriginalFilename(), type)) {
-                  isLegal = true;
-                  break;
-              }
-          }
-	
-          // 封装Result对象，并且将文件的byte数组放置到result对象中
-          PicUploadResult fileUploadResult = new PicUploadResult();
-	
-          // 状态
-          fileUploadResult.setError(isLegal ? 0 : 1);
-	
-          // 文件新路径
-          String filePath = getFilePath(uploadFile.getOriginalFilename());
-	
-          if (LOGGER.isDebugEnabled()) {
-              LOGGER.debug("Pic file upload .[{}] to [{}] .", uploadFile.getOriginalFilename(), filePath);
-          }
-	
-          // 生成图片的绝对引用地址
-          String picUrl = StringUtils.replace(StringUtils.substringAfter(filePath, propertieService.REPOSITORY_PATH), "\\", "/");
-          fileUploadResult.setUrl(propertieService.IMAGE_BASE_URL + picUrl);
-	
-          File newFile = new File(filePath);
-	
-          // 写文件到磁盘
-          uploadFile.transferTo(newFile);
-	
-          // 校验图片是否合法
-          isLegal = false;
-          try {
-              BufferedImage image = ImageIO.read(newFile);
-              if (image != null) {
-                  fileUploadResult.setWidth(image.getWidth() + "");
-                  fileUploadResult.setHeight(image.getHeight() + "");
-                  isLegal = true;
-              }
-          } catch (IOException e) {
-          }
-	
-          // 状态
-          fileUploadResult.setError(isLegal ? 0 : 1);
-	
-          if (!isLegal) {
-              // 不合法，将磁盘上的文件删除
-              newFile.delete();
-          }
-	
-          //将java对象序列化成Json字符串
-          return mapper.writeValueAsString(fileUploadResult);
-      }
-	
-      private String getFilePath(String sourceFileName) {
-          String baseFolder = "/Users/liujunchen/Developer/JavaProject/liujipuzi/ljpz-upload" + File.separator + "images";
-          Date nowDate = new Date();
-          // yyyy/MM/dd
-          String fileFolder = baseFolder + File.separator + new DateTime(nowDate).toString("yyyy") + File.separator + new DateTime(nowDate).toString("MM") + File.separator
-                  + new DateTime(nowDate).toString("dd");
-          File file = new File(fileFolder);
-          if (!file.isDirectory()) {
-              // 如果目录不存在，则创建目录
-              file.mkdirs();
-          }
-          // 生成新的文件名
-          String fileName = new DateTime(nowDate).toString("yyyyMMddhhmmssSSSS") + RandomUtils.nextInt(100, 9999) + "." + StringUtils.substringAfterLast(sourceFileName, ".");
-          return fileFolder + File.separator + fileName;
-      }
-	
-  }
-	
-	
-	
-	
-  * 在test的类里注射spring bean测试程序如下：
-	
-			
-          @RunWith(SpringJUnit4ClassRunner.class)
-          //加载配置文件
-          @ContextConfiguration
-                  ({"/spring/applicationContext.xml","/spring/applicationContext-mybatis.xml"})
-          public class UserinfoServiceTest {
-              private   static  final ObjectMapper   MAPPER = new ObjectMapper()   ;
-              private   String  tojson   ;
-              @Resource
-              private   UserinfoService  userinfoService ;
-			
-              @Before
-              public void setTojson() throws Exception {
-                  //准备一条测试数据
-                  this.tojson= MAPPER.writeValueAsString(
-                          new Userinfo( new Long(109),"junchen-test222",  "1",  new Date(),
-                                  "刘俊辰",  "大海", null, "1", "100000000", "310107", "本科", "计算机test"));
-              }
-              @Test
-              public void createUserinfo() throws Exception {
-                  userinfoService.createUserinfo(tojson)  ;
-			
-              }
-			
-              @Test
-              public void updateUserinfo() throws Exception {
-			
-                   userinfoService.updateUserinfo(tojson);
-              }
-			
-              @Test
-              public void queryByNickname() throws Exception {
-			
-                 /* 传统办法
-                  ApplicationContext applicationContext = new ClassPathXmlApplicationContext(
-                          "spring/applicationContext.xml","spring/applicationContext-mybatis.xml");
-                  UserinfoService  userinfoService=
-                          applicationContext.getBean("userinfoService",UserinfoService.class)  ;*/
-			
-                  Userinfo userinfo   =  userinfoService.queryByNickname(new Long(9));
-                  System.out.println(userinfo.toString());
-	
-      }
-</code></pre>
-    </div>
-  </li>
-  <li>
-    <h3 id="在页面导入css以及kindedit工具js">在页面导入css以及kindedit工具js</h3>
+</ul>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code>  &lt;%--上传组件--%&gt;
-  &lt;link rel="stylesheet" href="/js/kindeditor-4.1.7/themes/default/default.css" /&gt;
-  &lt;script src="/js/kindeditor-4.1.7/kindeditor-min.js"&gt;&lt;/script&gt;
+<p id="build2"></p>
+
+<h3 id="2整合插件到项目中去">2、整合插件到项目中去</h3>
+
+<ul>
+  <li>
+    <p>我自己选择了文档中的example–&gt;Server-side –&gt; Row details  的接触代码上面来编写自己的代码</p>
+  </li>
+  <li>
+    <p>对应的html代码 如下,这边模态弹出窗口代码省略了，如具体写法很简单 参考 bootstrap–&gt;modal即可自定义：</p>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code>  &lt;table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_1"&gt;
+                          &lt;thead&gt;
+                          &lt;tr&gt;
+                              &lt;th&gt; 任务号 &lt;/th&gt;
+                              &lt;th&gt; 任务名 &lt;/th&gt;
+                              &lt;th&gt; 任务种类 &lt;/th&gt;
+                              &lt;th&gt; 创建人 &lt;/th&gt;
+                              &lt;th&gt; 创建时间 &lt;/th&gt;
+                              &lt;th&gt; 操作 &lt;/th&gt;
+                          &lt;/tr&gt;
+                          &lt;/thead&gt;
+   &lt;/table&gt;
 </code></pre>
     </div>
   </li>
   <li>
-    <h3 id="在页面中添加js代码自己也是刚刚接触前段简要的注释下调用的js过程">在页面中添加js代码（自己也是刚刚接触前段简要的注释下调用的js过程）</h3>
+    <p>页面中自己加入了modal的弹出修改框，具体的js代码如下：</p>
 
     <div class="highlighter-rouge"><pre class="highlight"><code>  &lt;script&gt;
-         $(function() {
-          var uploadbutton = KindEditor.uploadbutton({
-              button : $('#uploadButton')[0],//上传button按钮
-              fieldName : 'uploadFile',//类型为uploadFile这个是富文本插件参数
-              url : '/service/pic/upload?dir=image',//送请求响应地址
-                      afterUpload : function(data) {
-                          if (data.error === 0) {
-                              var url = KindEditor.formatUrl(data.url, 'absolute');
-                              var tagurl= "&lt;img id='bigImage' name='bigImage' alt=''  width='150' height='150' src='"+url+"'&gt;";
-                              var   img2url   = "&lt;img id='midImage' width='100' height='100' name='midImage' src='"+ url   + "'&gt;"
-                              var   img3url   = "&lt;img id='smaImage' width='50' height='50' name='smaImage' src='"+ url   + "'&gt;"
-                              $('#url').val(url);
-                              //在网页中添加更新上传头像
-                              $(".img-b").html(tagurl)  ;
-                              $(".img-s").eq(0).html(img2url)  ;
-                              $(".img-s").eq(1).html(img3url)  ;
-                          } else {
-                              alert(data.message);
-                  }
-              },
-              afterError : function(str) {
-                  alert('自定义错误信息: ' + str);
+          //初始化对应datatable
+          $(document).ready(function() {
+            var dt=   $('#sample_1').DataTable( {
+                      "processing": true,
+                     "serverSide": true,
+                  "ajax": {
+                      "url": "/service/maintainceTask/dbtaskquery",
+                      "data": function (d) {
+                          d.createdBy = "${user.username}";
+                          // d.custom = $('#myInput').val();
+                          // etc
+                      }},
+                      "order": [[4, 'desc']],
+                      "columns": [
+                          {"data": "taskId"},
+                          {"data": "taskName"},
+                          {"data": "taskType"},
+                          {"data": "createdBy"},
+                          {"data": "created"},
+                          {
+                               "class":      "details-control",
+                              "orderable": true   ,
+                              "data":null,
+                              "render": function ( data, type ) {
+                                 // return '&lt;a href="'+data+'"&gt;编辑|&lt;/a&gt;&lt;a&gt;查看|&lt;/a&gt;&lt;a&gt;删除&lt;/a&gt;';
+                               return "&lt;button type='button' class='btn green' data-toggle='modal' data-target='#myModal' &gt;修改&lt;/button&gt;" +
+                                      "&lt;button type='button' class='btn red'  data-toggle='modal' data-target='#myDeleteModal'  &gt;删除&lt;/button&gt;"  +
+                                      "&lt;button type='button' class='btn green' &gt;查看&lt;/button&gt;"
+                              }
+                          }
+                      ]
               }
-          });
-          uploadbutton.fileBox.change(function(e) {
-              uploadbutton.submit();
-          });
-      });
+               );
+              // Array to track the ids of the details displayed rows
+              var detailRows = [];
+              $('#sample_1 tbody').on( 'click', 'tr td.details-control', function () {
+                  var tr = $(this).closest('tr');
+                  var row = dt.row( tr );
+                  var idx = $.inArray( tr.attr('id'), detailRows );
+
+                  if ( row.child.isShown() ) {
+                      tr.removeClass( 'details' );
+                      row.child.hide();
+
+                      // Remove from the 'open' array
+                      detailRows.splice( idx, 1 );
+                  }
+                  else {
+                      tr.addClass( 'details' );
+                      row.child( format( row.data() ) ).show();
+
+                      // Add to the 'open' array
+                      if ( idx === -1 ) {
+                          detailRows.push( tr.attr('id') );
+                      }
+                  }
+                  //把对应对象信息传入到对应的modal中去
+                  synModal(row.data());
+              } );
+
+              // On each draw, loop over the `detailRows` array and show any child rows
+              dt.on( 'draw', function () {
+                  $.each( detailRows, function ( i, id ) {
+                      $('#'+id+' td.details-control').trigger( 'click' );
+                  } );
+              } );
+          } );
+
+          //把记录子信息输出到对应的子表单中
+          function format ( d ) {
+              return  '数据库类型:'+d.dbConfig.dbType+'&lt;br&gt;'+
+                      '数据库地址:'+d.dbConfig.dbIp+'&lt;br&gt;'+
+                      '数据库端口:'+d.dbConfig.dbPort+'&lt;br&gt;'+
+                      '数据库名称:'+d.dbConfig.dbName+'&lt;br&gt;'+
+                      '数据库用户名:'+d.dbConfig.dbUsername;
+          }
+            
+           //向模态弹出框中框中传值。
+          function synModal(f) {
+              //向模态框中传值
+              $('input[name="taskName"]').val(f.taskName);
+              $('input[name="dbConfig.dbType"]').val(f.dbConfig.dbType);
+              $('input[name="dbConfig.dbPort"]').val(f.dbConfig.dbPort);
+              $('input[name="dbConfig.dbName"]').val(f.dbConfig.dbName);
+              $('input[name="dbConfig.dbUsername"]').val(f.dbConfig.dbUsername);
+              $('input[name="dbConfig.dbPassword"]').val(f.dbConfig.dbPassword);
+              $('input[name="dbConfig.dbIp"]').val(f.dbConfig.dbIp);
+              $('#dbContent').val(f.dbContent);
+              $('input[name="taskId"]').val(f.taskId);
+              $('input[name="dbConfig.dbId"]').val(f.dbConfig.dbId);
+              $('input[name="taskType"]').val(f.taskType);
+              $("h4.modal-delete").html("确定要删除"+f.taskId+"?");
+              $('input[name="deleteId"]').val(f.taskId);
+          }
   &lt;/script&gt;
 </code></pre>
     </div>
   </li>
   <li>
-    <h3 id="js成功调用截图">js成功调用截图</h3>
+    <p>查看文档的请求接口文档，弄清楚传递json字符串的格式，对应的文档在 <a href="https://datatables.net/manual/server-side">mannual</a>  上面  有详尽的说明 分为  sendData  AND returnData，后端服务器按照要求接受返回具体的参数就行，这边就不详尽说明了。</p>
+  </li>
+  <li>
+    <p>效果展示：</p>
+
+    <p><img src="http://i4.buimg.com/567571/d53731d59f2eef04.png" alt="" /></p>
+
+    <p><img src="http://i4.buimg.com/567571/9fb79bd0cff7892c.png" alt="" /></p>
+
+    <p><img src="http://i4.buimg.com/567571/49efc4ac30b5f7d3.png" alt="" /></p>
   </li>
 </ul>
 
-<p><img src="https://cl.ly/0o0U1A073S2I/Image%202017-02-23%20at%2010.19.41.png" alt="" /></p>
+<p id="build3"></p>
+
+<h3 id="3datatable插件运用小结">3、datatable插件运用小结</h3>
+<ul>
+  <li>
+    <p>自己项目中用到了很多优秀的开源jquery插件 ，非常好并且很美观,自己如果从头开始是非常难得，开发站在巨人的肩膀上，对于大多数开发者来说用好工具读懂文档的能力尤为重要！</p>
+  </li>
+  <li>
+    <p>前端发展特别快速，语法也特别灵活，学习一定以实践为主， 在使用中学习并且不断的总结。</p>
+  </li>
+</ul>
 
 
 
@@ -488,13 +385,13 @@
                 </style>
                 <div class="ds-share"
                     style="text-align: right"
-                    data-thread-key="/2017/02/21/imageupload"
-                    data-title="用KindEditor套件实现文件上传功能"
-                    data-url="http://localhost:4000/2017/02/21/imageupload/"
-                    data-images="http://localhost:4000/img/ie_sifhay7o-john-cobb.jpg"
+                    data-thread-key="/2017/03/22/java-springmvc-note5"
+                    data-title="表格展示控件datatable空间使用说明"
+                    data-url="http://localhost:4000/2017/03/22/java-springmvc-note5/"
+                    data-images="http://localhost:4000/img/2017-03-06.jpg"
                     data-content="
   
-    本文记录使用KindEditor的web组件实现界面的头像文件上传服务器中，项目基本架构为 spring-mvc  +   spring ... | Supremeliu Blog " >
+    好久没有更新了 ，自己这10天也没有闲着因为看到市面上面的表格的控件基本用的都是easyui 的，那个界面个人不大喜欢的，自己项目用的ui... | Supremeliu Blog " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
                         <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -514,13 +411,9 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2017/02/20/springtest-configuration/" data-toggle="tooltip" data-placement="top" title="用junit测试单个服务调用">&larr; Previous Post</a>
+                        <a href="/2017/03/12/java-springmvc-note4/" data-toggle="tooltip" data-placement="top" title="java-web项目问题小结(4)">&larr; Previous Post</a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/2017/02/23/httprequestjsonp/" data-toggle="tooltip" data-placement="top" title="java-web跨域请求解决方案-jsonp">Next Post &rarr;</a>
-                    </li>
                     
                 </ul>
 
@@ -531,9 +424,9 @@
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                        data-thread-key="/2017/02/21/imageupload"
-                        data-title="用KindEditor套件实现文件上传功能"
-                        data-url="http://localhost:4000/2017/02/21/imageupload/" >
+                        data-thread-key="/2017/03/22/java-springmvc-note5"
+                        data-title="表格展示控件datatable空间使用说明"
+                        data-url="http://localhost:4000/2017/03/22/java-springmvc-note5/" >
                     </div>
                 </div>
                 <!-- 多说评论框 end -->
